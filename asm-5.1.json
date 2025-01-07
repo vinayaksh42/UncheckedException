@@ -342,9 +342,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -1439,9 +1437,7 @@
                     "<org.objectweb.asm.ClassWriter: int newUTF8(java.lang.String)>",
                     "<org.objectweb.asm.ClassWriter: int newUTF8(java.lang.String)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -1626,9 +1622,7 @@
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector putShort(int)>",
                     "<org.objectweb.asm.MethodWriter: void a(java.lang.Object)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalStateException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2097,9 +2091,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -2130,9 +2122,7 @@
                 "methodName": "visitTryCatchAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2209,9 +2199,7 @@
                 "methodName": "visitTypeAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2281,9 +2269,7 @@
                 "methodName": "visitLocalVariableAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -2296,9 +2282,7 @@
                 "methodName": "visitInsnAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2470,9 +2454,7 @@
                 "methodName": "getOffset",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalStateException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2989,9 +2971,7 @@
                     "<org.objectweb.asm.Frame: void c(int)>",
                     "<org.objectweb.asm.Frame: void a(org.objectweb.asm.ClassWriter,java.lang.String)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -3190,9 +3170,7 @@
                 "methodName": "visitTypeAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -3206,9 +3184,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             }
         ]
     },
@@ -3277,9 +3253,7 @@
                 "methodName": "getCommonSuperClass",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3447,9 +3421,7 @@
                     "<org.objectweb.asm.ClassReader: void <init>(byte[])>",
                     "<org.objectweb.asm.ClassReader: void accept(org.objectweb.asm.ClassVisitor,int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3661,9 +3633,7 @@
                 "methodName": "a",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3873,9 +3843,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3994,9 +3962,7 @@
                 "methodName": "visitTypeAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.RuntimeException"
-                ]
+                "transitive_unchecked_exceptions": []
             }
         ]
     },
@@ -4075,9 +4041,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -4568,9 +4532,7 @@
                 "internal_method_calls": [
                     "<org.objectweb.asm.ByteVector: void a(int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -4618,9 +4580,7 @@
                 "internal_method_calls": [
                     "<org.objectweb.asm.ByteVector: void a(int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -4973,9 +4933,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],

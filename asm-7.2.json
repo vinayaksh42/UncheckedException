@@ -388,9 +388,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -425,9 +423,7 @@
                     "<org.objectweb.asm.signature.SignatureVisitor: void visitBaseType(char)>",
                     "<org.objectweb.asm.signature.SignatureVisitor: void visitTypeVariable(java.lang.String)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -553,9 +549,7 @@
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector put12(int,int)>",
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector putInt(int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -738,9 +732,7 @@
                 "methodName": "toString",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -763,9 +755,7 @@
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector put11(int,int)>",
                     "<org.objectweb.asm.TypePath: void <init>(byte[],int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             }
         ]
     },
@@ -813,9 +803,7 @@
                     "<org.objectweb.asm.Type: void <init>(int,java.lang.String,int,int)>",
                     "<org.objectweb.asm.Type: void <init>(int,java.lang.String,int,int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -895,9 +883,7 @@
                 "methodName": "getType",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -979,9 +965,7 @@
                 "methodName": "getSize",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -1013,10 +997,7 @@
                 "methodName": "getOpcode",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError",
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -1045,9 +1026,7 @@
                 "methodName": "appendDescriptor",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -1071,9 +1050,7 @@
                 "methodName": "getClassName",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -1557,9 +1534,7 @@
                     "<org.objectweb.asm.SymbolTable: void addConstantUtf8Reference(int,int,java.lang.String)>",
                     "<org.objectweb.asm.SymbolTable: void copyBootstrapMethods(org.objectweb.asm.ClassReader,char[])>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -1715,9 +1690,7 @@
                 "methodName": "addConstant",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2137,9 +2110,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2263,9 +2234,7 @@
                     "<org.objectweb.asm.SymbolTable: int addConstantUtf8(java.lang.String)>",
                     "<org.objectweb.asm.SymbolTable: int addConstantUtf8(java.lang.String)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "org.objectweb.asm.MethodTooLargeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -2610,10 +2579,7 @@
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector putShort(int)>",
                     "<org.objectweb.asm.MethodWriter: void putFrameType(java.lang.Object)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalStateException",
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3015,9 +2981,7 @@
                 "methodName": "visitInsnAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3093,9 +3057,7 @@
                 "methodName": "visitTryCatchAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3119,9 +3081,7 @@
                 "methodName": "visitTypeAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -3239,9 +3199,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3370,9 +3328,7 @@
                 "methodName": "visitLocalVariableAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3581,9 +3537,7 @@
                 "methodName": "getOffset",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalStateException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3911,10 +3865,7 @@
                     "<org.objectweb.asm.Frame: void push(org.objectweb.asm.SymbolTable,java.lang.String)>",
                     "<org.objectweb.asm.Frame: void pop(int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError",
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -3972,9 +3923,7 @@
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector putShort(int)>",
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector putShort(int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.AssertionError"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -4007,9 +3956,7 @@
                 "methodName": "getAbstractTypeFromDescriptor",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -4271,9 +4218,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -4286,9 +4231,7 @@
                 "methodName": "visitTypeAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -4760,9 +4703,7 @@
                     "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector putByteArray(byte[],int,int)>",
                     "<org.objectweb.asm.Attribute: void putAttributes(org.objectweb.asm.SymbolTable,org.objectweb.asm.ByteVector)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "org.objectweb.asm.ClassTooLargeException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -4835,9 +4776,7 @@
                 "methodName": "getCommonSuperClass",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.TypeNotPresentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -4944,9 +4883,7 @@
                 "methodName": "visitTypeAnnotation",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -5033,9 +4970,7 @@
                 "methodName": "visitModule",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -5088,9 +5023,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             }
         ]
     },
@@ -5198,9 +5131,7 @@
                     "<org.objectweb.asm.ClassReader: int readElementValues(org.objectweb.asm.AnnotationVisitor,int,boolean,char[])>"
                 ],
                 "transitive_unchecked_exceptions": [
-                    "java.lang.UnsupportedOperationException",
-                    "java.lang.AssertionError",
-                    "java.lang.IllegalArgumentException"
+                    "java.lang.UnsupportedOperationException"
                 ]
             },
             {
@@ -5218,9 +5149,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -5293,9 +5222,7 @@
                 "internal_method_calls": [
                     "<org.objectweb.asm.ClassReader: org.objectweb.asm.Label createLabel(int,org.objectweb.asm.Label[])>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -5390,9 +5317,7 @@
                 "internal_method_calls": [
                     "<org.objectweb.asm.Handle: void <init>(int,java.lang.String,java.lang.String,java.lang.String,boolean)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -5496,9 +5421,7 @@
                 "methodName": "readBootstrapMethodsAttribute",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -5511,9 +5434,7 @@
                 "methodName": "readVerificationTypeInfo",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -5548,9 +5469,7 @@
                     "<org.objectweb.asm.ClassReader: org.objectweb.asm.Label createLabel(int,org.objectweb.asm.Label[])>",
                     "<org.objectweb.asm.TypePath: void <init>(byte[],int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -5613,9 +5532,7 @@
                 "internal_method_calls": [
                     "<org.objectweb.asm.TypePath: void <init>(byte[],int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -5667,9 +5584,7 @@
                     "<org.objectweb.asm.AnnotationVisitor: void visitEnum(java.lang.String,java.lang.String,java.lang.String)>",
                     "<org.objectweb.asm.AnnotationVisitor: void visit(java.lang.String,java.lang.Object)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],
@@ -5805,9 +5720,7 @@
                 "internal_method_calls": [
                     "<org.objectweb.asm.ByteVector: void enlarge(int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [
@@ -5967,9 +5880,7 @@
                 "internal_method_calls": [
                     "<org.objectweb.asm.ByteVector: void enlarge(int)>"
                 ],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             }
         ]
     },
@@ -6433,9 +6344,7 @@
                 "methodName": "<init>",
                 "checked_exceptions": [],
                 "internal_method_calls": [],
-                "transitive_unchecked_exceptions": [
-                    "java.lang.IllegalArgumentException"
-                ]
+                "transitive_unchecked_exceptions": []
             },
             {
                 "external_method_calls": [],

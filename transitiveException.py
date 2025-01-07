@@ -14,7 +14,7 @@ def update_transitive_unchecked_exceptions(data):
     for class_methods in data:
         for methods in class_methods.values():
             for method in methods:
-                transitive_unchecked_exceptions = set(method['unchecked_exceptions'])
+                transitive_unchecked_exceptions = set()
                 for internal_call in method['internal_method_calls']:
                     called_method = find_method_signature(data, internal_call)
                     if called_method:
