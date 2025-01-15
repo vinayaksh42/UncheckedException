@@ -1,0 +1,500 @@
+[
+    {
+        "methodSignature": "<org.objectweb.asm.signature.SignatureReader: int parseType(java.lang.String,int,org.objectweb.asm.signature.SignatureVisitor)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.signature.SignatureReader: void acceptType(org.objectweb.asm.signature.SignatureVisitor)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.TypeReference: void putTarget(int,org.objectweb.asm.ByteVector)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.TypePath: java.lang.String toString()>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.TypePath: org.objectweb.asm.TypePath fromString(java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: org.objectweb.asm.Type getType(java.lang.Class)>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: java.lang.String getConstructorDescriptor(java.lang.reflect.Constructor)>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: int getOpcode(int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: int getSize()>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: java.lang.String getDescriptor(java.lang.Class)>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: org.objectweb.asm.Type getTypeInternal(java.lang.String,int,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: void appendDescriptor(java.lang.Class,java.lang.StringBuilder)>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: java.lang.String getClassName()>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Type: java.lang.String getMethodDescriptor(java.lang.reflect.Method)>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.SymbolTable: void <init>(org.objectweb.asm.ClassWriter,org.objectweb.asm.ClassReader)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.SymbolTable: int addConstantUtf8(java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.SymbolTable: org.objectweb.asm.Symbol addBootstrapMethod(org.objectweb.asm.Handle,java.lang.Object[])>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.SymbolTable: org.objectweb.asm.Symbol addConstant(java.lang.Object)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.SymbolTable: int computeBootstrapMethodsSize()>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ModuleWriter: int computeAttributesSize()>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ModuleVisitor: void <init>(int,org.objectweb.asm.ModuleVisitor)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ModuleVisitor: void <init>(int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitInvokeDynamicInsn(java.lang.String,java.lang.String,org.objectweb.asm.Handle,java.lang.Object[])>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitInsn(int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitJumpInsn(int,org.objectweb.asm.Label)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitFrame(int,int,java.lang.Object[],int,java.lang.Object[])>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitMultiANewArrayInsn(java.lang.String,int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitIntInsn(int,int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitTypeInsn(int,java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitLdcInsn(java.lang.Object)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitSwitchInsn(org.objectweb.asm.Label,org.objectweb.asm.Label[])>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitIincInsn(int,int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: int computeMethodInfoSize()>",
+        "new_exceptions": [
+            "org.objectweb.asm.MethodTooLargeException",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitMethodInsn(int,java.lang.String,java.lang.String,java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitVarInsn(int,int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void putAbstractTypes(int,int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitTableSwitchInsn(int,int,org.objectweb.asm.Label,org.objectweb.asm.Label[])>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodWriter: void visitFieldInsn(int,java.lang.String,java.lang.String,java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: org.objectweb.asm.AnnotationVisitor visitTryCatchAnnotation(int,org.objectweb.asm.TypePath,java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: org.objectweb.asm.AnnotationVisitor visitTypeAnnotation(int,org.objectweb.asm.TypePath,java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: void visitParameter(java.lang.String,int)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: void visitMethodInsn(int,java.lang.String,java.lang.String,java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: void visitInvokeDynamicInsn(java.lang.String,java.lang.String,org.objectweb.asm.Handle,java.lang.Object[])>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: void visitLdcInsn(java.lang.Object)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: void visitMethodInsn(int,java.lang.String,java.lang.String,java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: org.objectweb.asm.AnnotationVisitor visitInsnAnnotation(int,org.objectweb.asm.TypePath,java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.MethodVisitor: org.objectweb.asm.AnnotationVisitor visitLocalVariableAnnotation(int,org.objectweb.asm.TypePath,org.objectweb.asm.Label[],org.objectweb.asm.Label[],int[],java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Frame: int getAbstractTypeFromDescriptor(org.objectweb.asm.SymbolTable,java.lang.String,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Frame: void execute(int,int,org.objectweb.asm.Symbol,org.objectweb.asm.SymbolTable)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException",
+            "java.lang.IllegalArgumentException",
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Frame: void putAbstractType(org.objectweb.asm.SymbolTable,int,org.objectweb.asm.ByteVector)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.FieldWriter: int computeFieldInfoSize()>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.FieldVisitor: org.objectweb.asm.AnnotationVisitor visitTypeAnnotation(int,org.objectweb.asm.TypePath,java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.CurrentFrame: void execute(int,int,org.objectweb.asm.Symbol,org.objectweb.asm.SymbolTable)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassWriter: java.lang.String getCommonSuperClass(java.lang.String,java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.TypeNotPresentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassWriter: byte[] replaceAsmInstructions(byte[],boolean)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassWriter: void <init>(org.objectweb.asm.ClassReader,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassWriter: byte[] toByteArray()>",
+        "new_exceptions": [
+            "org.objectweb.asm.ClassTooLargeException",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassVisitor: org.objectweb.asm.ModuleVisitor visitModule(java.lang.String,int,java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassVisitor: void visitNestHost(java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException",
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassVisitor: void visitNestMember(java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException",
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassVisitor: org.objectweb.asm.AnnotationVisitor visitTypeAnnotation(int,org.objectweb.asm.TypePath,java.lang.String,boolean)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: int readStackMapFrame(int,boolean,boolean,org.objectweb.asm.Context)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: void <init>(byte[],int,boolean)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException",
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: int[] readBootstrapMethodsAttribute(int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: int readVerificationTypeInfo(int,java.lang.Object[],int,char[],org.objectweb.asm.Label[])>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: int readElementValue(org.objectweb.asm.AnnotationVisitor,int,java.lang.String,char[])>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: int[] readTypeAnnotations(org.objectweb.asm.MethodVisitor,org.objectweb.asm.Context,int,boolean)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: java.lang.Object readConst(int,char[])>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: void accept(org.objectweb.asm.ClassVisitor,org.objectweb.asm.Attribute[],int)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: int readTypeAnnotationTarget(org.objectweb.asm.Context,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: void accept(org.objectweb.asm.ClassVisitor,int)>",
+        "new_exceptions": [
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: int readMethod(org.objectweb.asm.ClassVisitor,org.objectweb.asm.Context,int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError",
+            "java.lang.IllegalArgumentException",
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ClassReader: void readCode(org.objectweb.asm.MethodVisitor,org.objectweb.asm.Context,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException",
+            "java.lang.IllegalArgumentException",
+            "java.lang.AssertionError",
+            "java.lang.UnsupportedOperationException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.ByteVector: org.objectweb.asm.ByteVector encodeUtf8(java.lang.String,int,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Attribute: int computeAttributesSize(org.objectweb.asm.SymbolTable,byte[],int,int,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.Attribute: int computeAttributesSize(org.objectweb.asm.SymbolTable,int,int)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.AnnotationWriter: org.objectweb.asm.AnnotationWriter create(org.objectweb.asm.SymbolTable,int,org.objectweb.asm.TypePath,java.lang.String,org.objectweb.asm.AnnotationWriter)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.objectweb.asm.AnnotationWriter: int computeAnnotationsSize(java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    }
+]

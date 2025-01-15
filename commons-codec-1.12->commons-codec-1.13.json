@@ -1,0 +1,44 @@
+[
+    {
+        "methodSignature": "<org.apache.commons.codec.Resources: java.io.InputStream getInputStream(java.lang.String)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.digest.MurmurHash3$IncrementalHash32: void add(byte[],int,int)>",
+        "new_exceptions": [
+            "java.lang.AssertionError"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base64: long validateCharacter(int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base64: void decode(byte[],int,int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base32: void validateCharacter(int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base32: void <init>()>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base32: void decode(byte[],int,int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    }
+]

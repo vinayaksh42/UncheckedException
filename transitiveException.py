@@ -19,26 +19,22 @@ def update_transitive_unchecked_exceptions(data):
                     called_method = find_method_signature(data, internal_call)
                     if called_method:
                         transitive_unchecked_exceptions.update(called_method['unchecked_exceptions'])
-                method['transitive_unchecked_exceptions'] = list(transitive_unchecked_exceptions)
+                method['unchecked_exceptions'].extend(transitive_unchecked_exceptions)
 
-def main():
-    parser = argparse.ArgumentParser(description='Process two library strings.')
-    parser.add_argument('libraryOld', type=str, help='The old library string')
-    parser.add_argument('libraryNew', type=str, help='The new library string')
-    args = parser.parse_args()
-
-    libraryOldPath = "resources/" + args.libraryOld
-    libraryNewPath = "resources/" + args.libraryNew
+def runAnalysisOnLibrary(libraryOld, libraryNew):
+    libraryOldPath = "resources/" + libraryOld + ".jar"
+    libraryNewPath = "resources/" + libraryNew + ".jar"
 
     # Invoke the JAR file for older version of the library
     jar_path = 'target/unexpectedException-1.0-SNAPSHOT.jar'
-    # subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, args.libraryOld])
+    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld])
 
     # Invoke the JAR file for newer version of the library
-    # subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, args.libraryNew])
+    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew])
 
-    jsonFilePathOld = args.libraryOld.replace('.jar', '.json')
-    jsonFilePathNew = args.libraryNew.replace('.jar', '.json')
+def runInternalExceptionAddition(libraryOld, libraryNew):
+    jsonFilePathOld = libraryOld + '.json'
+    jsonFilePathNew = libraryNew + '.json'
 
     with open(jsonFilePathOld, 'r') as file:
         data = json.load(file)
@@ -55,6 +51,47 @@ def main():
 
     with open(jsonFilePathNew, 'w') as file:
         json.dump(data, file, indent=4)
+
+def compareOldandNew(libraryOld, libraryNew):
+    jsonFilePathOld = libraryOld + '.json'
+    jsonFilePathNew = libraryNew + '.json'
+
+    with open(jsonFilePathOld, 'r') as file:
+        dataOld = json.load(file)
+
+    with open(jsonFilePathNew, 'r') as file:
+        dataNew = json.load(file)
+
+    new_exceptions = []
+
+    for class_methods in dataNew:
+        for methods in class_methods.values():
+            for method in methods:
+                old_method = find_method_signature(dataOld, method['methodSignature'])
+                if old_method:
+                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': list(set(method['unchecked_exceptions']) - set(old_method['unchecked_exceptions']))}])
+                else:
+                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': method['unchecked_exceptions']}])
+
+    new_exceptions = [entry for entry in new_exceptions if entry['new_exceptions']]
+    
+    with open((libraryOld + "->" + libraryNew + ".json"), 'w') as file:
+        json.dump(new_exceptions, file, indent=4)
+
+def main():
+    parser = argparse.ArgumentParser(description='Process two library strings.')
+    parser.add_argument('libraryOld', type=str, help='The old library string')
+    parser.add_argument('libraryNew', type=str, help='The new library string')
+    args = parser.parse_args()
+
+    # generates the JSON files for the old and new version of the library - step 0
+    runAnalysisOnLibrary(args.libraryOld, args.libraryNew)
+
+    # adding the transitive unchecked exceptions for the old and new version of the library - step 1
+    runInternalExceptionAddition(args.libraryOld, args.libraryNew)
+
+    # comparing the old and new version of the library - step final
+    compareOldandNew(args.libraryOld, args.libraryNew)
 
 if __name__ == "__main__":
     main()
