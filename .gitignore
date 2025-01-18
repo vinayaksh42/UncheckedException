@@ -39,3 +39,6 @@ build/
 
 bin
 .idea
+
+resources/rt.jar
+rt.jar
