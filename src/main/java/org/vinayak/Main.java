@@ -1,12 +1,11 @@
 package org.vinayak;
 
+import com.google.common.collect.ImmutableList;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import sootup.core.inputlocation.AnalysisInputLocation;
@@ -15,10 +14,9 @@ import sootup.core.model.Body;
 import sootup.core.model.SootClass;
 import sootup.core.model.SootMethod;
 import sootup.core.model.SourceType;
+import sootup.core.typehierarchy.TypeHierarchy;
 import sootup.core.types.ClassType;
-import sootup.core.views.View;
-import sootup.java.bytecode.inputlocation.PathBasedAnalysisInputLocation;
-import sootup.java.core.jimple.basic.JavaLocal;
+import sootup.java.bytecode.inputlocation.JavaClassPathAnalysisInputLocation;
 import sootup.java.core.views.JavaView;
 
 public class Main {
@@ -35,14 +33,30 @@ public class Main {
 
   public static void analyzeJAR(String pathToJAR, String libraryName) {
     JSONArray classArray = new JSONArray();
-    Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
-    View view = new JavaView(inputLocation);
+
+    String jarFile = pathToJAR;
+    String rtJarFile = "resources/rt.jar";
+
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(jarFile);
+    AnalysisInputLocation inputlocationRTJAR =
+        new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
+
+    List<AnalysisInputLocation> inputLocations =
+        ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
+
+    JavaView view = new JavaView(inputLocations);
+
+    TypeHierarchy typehierarchy = view.getTypeHierarchy();
+
     for (SootClass sootClass : view.getClasses()) {
       JSONArray methodsArray = new JSONArray();
+
+      if (sootClass.isLibraryClass() == true) {
+        continue;
+      }
+
       for (SootMethod method : sootClass.getMethods()) {
-        Map<ClassType, JavaLocal> methodExceptionMap = new HashMap<>();
-        List<ClassType> checkedExceptions = method.getExceptionSignatures();
         List<ClassType> uncheckedExceptions = new ArrayList<>();
         List<String> internalMethodCalls = new ArrayList<>();
         List<String> externalMethodCalls = new ArrayList<>();
@@ -50,18 +64,19 @@ public class Main {
         if (method.isAbstract() || method.isNative()) {
           continue;
         }
-        Body body = method.getBody();
-        List<Stmt> stmts = body.getStmts();
 
+        Body body = method.getBody();
+        Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
+        List<Stmt> stmts = body.getStmts();
         // using the visitor for the stmts
-        StmtVisitor stmtVisitor = new StmtVisitor(
-            body,
-            view,
-            methodExceptionMap,
-            checkedExceptions,
-            uncheckedExceptions,
-            internalMethodCalls,
-            externalMethodCalls);
+        StmtVisitor stmtVisitor =
+            new StmtVisitor(
+                typehierarchy,
+                view,
+                bodyBuilder,
+                uncheckedExceptions,
+                internalMethodCalls,
+                externalMethodCalls);
         for (Stmt stmt : stmts) {
           stmt.accept(stmtVisitor);
         }
