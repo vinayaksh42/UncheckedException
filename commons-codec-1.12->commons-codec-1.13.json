@@ -1,12 +1,6 @@
 [
     {
-        "methodSignature": "<org.apache.commons.codec.binary.Base32: void <init>(int)>",
-        "new_exceptions": [
-            "java.lang.IllegalArgumentException"
-        ]
-    },
-    {
-        "methodSignature": "<org.apache.commons.codec.binary.Base32: void validateCharacter(int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
+        "methodSignature": "<org.apache.commons.codec.binary.Base32: void decode(byte[],int,int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
         "new_exceptions": [
             "java.lang.IllegalArgumentException"
         ]
@@ -18,13 +12,7 @@
         ]
     },
     {
-        "methodSignature": "<org.apache.commons.codec.binary.Base32: void decode(byte[],int,int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
-        "new_exceptions": [
-            "java.lang.IllegalArgumentException"
-        ]
-    },
-    {
-        "methodSignature": "<org.apache.commons.codec.binary.Base32InputStream: void <init>(java.io.InputStream,boolean,int,byte[])>",
+        "methodSignature": "<org.apache.commons.codec.binary.Base32: void validateCharacter(int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
         "new_exceptions": [
             "java.lang.IllegalArgumentException"
         ]
@@ -36,7 +24,13 @@
         ]
     },
     {
-        "methodSignature": "<org.apache.commons.codec.binary.Base64: void decode(byte[],int,int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
+        "methodSignature": "<org.apache.commons.codec.binary.Base32InputStream: void <init>(java.io.InputStream,boolean,int,byte[])>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base32InputStream: void <init>(java.io.InputStream)>",
         "new_exceptions": [
             "java.lang.IllegalArgumentException"
         ]
@@ -48,13 +42,19 @@
         ]
     },
     {
-        "methodSignature": "<org.apache.commons.codec.binary.Base32OutputStream: void <init>(java.io.OutputStream,boolean,int,byte[])>",
+        "methodSignature": "<org.apache.commons.codec.binary.Base64: void decode(byte[],int,int,org.apache.commons.codec.binary.BaseNCodec$Context)>",
         "new_exceptions": [
             "java.lang.IllegalArgumentException"
         ]
     },
     {
         "methodSignature": "<org.apache.commons.codec.binary.Base32OutputStream: void <init>(java.io.OutputStream,boolean)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base32OutputStream: void <init>(java.io.OutputStream,boolean,int,byte[])>",
         "new_exceptions": [
             "java.lang.IllegalArgumentException"
         ]
@@ -72,13 +72,19 @@
         ]
     },
     {
-        "methodSignature": "<org.apache.commons.codec.binary.Base64InputStream: void <init>(java.io.InputStream,boolean,int,byte[])>",
+        "methodSignature": "<org.apache.commons.codec.binary.Base64InputStream: void <init>(java.io.InputStream,boolean)>",
         "new_exceptions": [
             "java.lang.IllegalArgumentException"
         ]
     },
     {
-        "methodSignature": "<org.apache.commons.codec.binary.Base64InputStream: void <init>(java.io.InputStream,boolean)>",
+        "methodSignature": "<org.apache.commons.codec.binary.Base64InputStream: void <init>(java.io.InputStream)>",
+        "new_exceptions": [
+            "java.lang.IllegalArgumentException"
+        ]
+    },
+    {
+        "methodSignature": "<org.apache.commons.codec.binary.Base64InputStream: void <init>(java.io.InputStream,boolean,int,byte[])>",
         "new_exceptions": [
             "java.lang.IllegalArgumentException"
         ]

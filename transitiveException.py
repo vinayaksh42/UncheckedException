@@ -21,6 +21,18 @@ def update_transitive_unchecked_exceptions(data):
                         transitive_unchecked_exceptions.update(called_method['unchecked_exceptions'])
                 method['unchecked_exceptions'].extend(transitive_unchecked_exceptions)
 
+def update_transitive_unchecked_exceptions_external(data, externalData):
+    for class_methods in data:
+        for methods in class_methods.values():
+            for method in methods:
+                JAVASTL_unchecked_exceptions = set()
+                for external_call in method['external_method_calls']:
+                    called_method = find_method_signature(externalData, external_call)
+                    if called_method:
+                        JAVASTL_unchecked_exceptions.update(called_method['unchecked_exceptions'])
+                method['unchecked_exceptions_external'] = list(JAVASTL_unchecked_exceptions)
+
+
 def runAnalysisOnLibrary(libraryOld, libraryNew):
     libraryOldPath = "resources/" + libraryOld + ".jar"
     libraryNewPath = "resources/" + libraryNew + ".jar"
@@ -78,6 +90,29 @@ def compareOldandNew(libraryOld, libraryNew):
     with open((libraryOld + "->" + libraryNew + ".json"), 'w') as file:
         json.dump(new_exceptions, file, indent=4)
 
+def runExternalJavaSTLException(libraryOld, libraryNew):
+    jsonFilePathOld = libraryOld + '.json'
+    jsonFilePathNew = libraryNew + '.json'
+
+    with open(jsonFilePathOld, 'r') as file:
+        data = json.load(file)
+    
+    with open('resources/rt.json', 'r') as file:
+        externalData = json.load(file)
+    
+    update_transitive_unchecked_exceptions_external(data, externalData)
+
+    with open(jsonFilePathOld, 'w') as file:
+        json.dump(data, file, indent=4)
+    
+    with open(jsonFilePathNew, 'r') as file:
+        data = json.load(file)
+    
+    update_transitive_unchecked_exceptions_external(data, externalData)
+
+    with open(jsonFilePathNew, 'w') as file:
+        json.dump(data, file, indent=4)
+
 def main():
     parser = argparse.ArgumentParser(description='Process two library strings.')
     parser.add_argument('libraryOld', type=str, help='The old library string')
@@ -89,6 +124,9 @@ def main():
 
     # adding the transitive unchecked exceptions for the old and new version of the library - step 1
     runInternalExceptionAddition(args.libraryOld, args.libraryNew)
+
+    # adding the transitive unchecked exceptions for the old and new version of the library from the JAVA Standard library - step 2
+    runExternalJavaSTLException(args.libraryOld, args.libraryNew)
 
     # comparing the old and new version of the library - step final
     compareOldandNew(args.libraryOld, args.libraryNew)

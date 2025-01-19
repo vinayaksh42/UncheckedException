@@ -38,7 +38,7 @@ public class Main {
     String rtJarFile = "resources/rt.jar";
 
     AnalysisInputLocation inputlocationJARToAnalyze =
-        new JavaClassPathAnalysisInputLocation(jarFile);
+        new JavaClassPathAnalysisInputLocation(jarFile, SourceType.Application);
     AnalysisInputLocation inputlocationRTJAR =
         new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
 
