@@ -30,8 +30,7 @@ def update_transitive_unchecked_exceptions_external(data, externalData):
                     called_method = find_method_signature(externalData, external_call)
                     if called_method:
                         JAVASTL_unchecked_exceptions.update(called_method['unchecked_exceptions'])
-                method['unchecked_exceptions_external'] = list(JAVASTL_unchecked_exceptions)
-
+                method['unchecked_java_exceptions_external'] = list(JAVASTL_unchecked_exceptions)
 
 def runAnalysisOnLibrary(libraryOld, libraryNew):
     libraryOldPath = "resources/" + libraryOld + ".jar"
@@ -81,11 +80,11 @@ def compareOldandNew(libraryOld, libraryNew):
             for method in methods:
                 old_method = find_method_signature(dataOld, method['methodSignature'])
                 if old_method:
-                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': list(set(method['unchecked_exceptions']) - set(old_method['unchecked_exceptions']))}])
+                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': list(set(method['unchecked_exceptions']) - set(old_method['unchecked_exceptions'])), 'new_java_exceptions_external': list(set(method['unchecked_java_exceptions_external']) - set(old_method['unchecked_java_exceptions_external']))}])
                 else:
-                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': method['unchecked_exceptions']}])
+                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': method['unchecked_exceptions'], 'new_java_exceptions_external': method['unchecked_java_exceptions_external']}])
 
-    new_exceptions = [entry for entry in new_exceptions if entry['new_exceptions']]
+    new_exceptions = [entry for entry in new_exceptions if entry['new_exceptions'] or entry['new_java_exceptions_external']]
     
     with open((libraryOld + "->" + libraryNew + ".json"), 'w') as file:
         json.dump(new_exceptions, file, indent=4)
@@ -112,6 +111,7 @@ def runExternalJavaSTLException(libraryOld, libraryNew):
 
     with open(jsonFilePathNew, 'w') as file:
         json.dump(data, file, indent=4)
+
 
 def main():
     parser = argparse.ArgumentParser(description='Process two library strings.')

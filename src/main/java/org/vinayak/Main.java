@@ -37,13 +37,11 @@ public class Main {
     String jarFile = pathToJAR;
     String rtJarFile = "resources/rt.jar";
 
-    AnalysisInputLocation inputlocationJARToAnalyze =
-        new JavaClassPathAnalysisInputLocation(jarFile, SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR =
-        new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
+    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(jarFile,
+        SourceType.Application);
+    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
 
-    List<AnalysisInputLocation> inputLocations =
-        ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
+    List<AnalysisInputLocation> inputLocations = ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
 
     JavaView view = new JavaView(inputLocations);
 
@@ -69,14 +67,13 @@ public class Main {
         Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
         List<Stmt> stmts = body.getStmts();
         // using the visitor for the stmts
-        StmtVisitor stmtVisitor =
-            new StmtVisitor(
-                typehierarchy,
-                view,
-                bodyBuilder,
-                uncheckedExceptions,
-                internalMethodCalls,
-                externalMethodCalls);
+        StmtVisitor stmtVisitor = new StmtVisitor(
+            typehierarchy,
+            view,
+            bodyBuilder,
+            uncheckedExceptions,
+            internalMethodCalls,
+            externalMethodCalls);
         for (Stmt stmt : stmts) {
           stmt.accept(stmtVisitor);
         }
