@@ -1,6 +1,7 @@
 import json
 import argparse
 import subprocess
+from collections import Counter
 
 def find_method_signature(data, method_signature):
     for class_methods in data:
@@ -38,14 +39,14 @@ def runAnalysisOnLibrary(libraryOld, libraryNew):
 
     # Invoke the JAR file for older version of the library
     jar_path = 'target/unexpectedException-1.0-SNAPSHOT.jar'
-    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld])
+    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld, "library"])
 
     # Invoke the JAR file for newer version of the library
-    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew])
+    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew, "library"])
 
 def runInternalExceptionAddition(libraryOld, libraryNew):
-    jsonFilePathOld = libraryOld + '.json'
-    jsonFilePathNew = libraryNew + '.json'
+    jsonFilePathOld = 'results/' + libraryOld + '.json'
+    jsonFilePathNew = 'results/' + libraryNew + '.json'
 
     with open(jsonFilePathOld, 'r') as file:
         data = json.load(file)
@@ -64,8 +65,8 @@ def runInternalExceptionAddition(libraryOld, libraryNew):
         json.dump(data, file, indent=4)
 
 def compareOldandNew(libraryOld, libraryNew):
-    jsonFilePathOld = libraryOld + '.json'
-    jsonFilePathNew = libraryNew + '.json'
+    jsonFilePathOld = 'results/' + libraryOld + '.json'
+    jsonFilePathNew = 'results/' + libraryNew + '.json'
 
     with open(jsonFilePathOld, 'r') as file:
         dataOld = json.load(file)
@@ -75,23 +76,25 @@ def compareOldandNew(libraryOld, libraryNew):
 
     new_exceptions = []
 
-    for class_methods in dataNew:
-        for methods in class_methods.values():
+    for classes in dataNew:
+        for methods in classes.values():
             for method in methods:
                 old_method = find_method_signature(dataOld, method['methodSignature'])
                 if old_method:
-                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': list(set(method['unchecked_exceptions']) - set(old_method['unchecked_exceptions'])), 'new_java_exceptions_external': list(set(method['unchecked_java_exceptions_external']) - set(old_method['unchecked_java_exceptions_external']))}])
-                else:
-                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': method['unchecked_exceptions'], 'new_java_exceptions_external': method['unchecked_java_exceptions_external']}])
+                    difference = list(Counter(method['unchecked_exceptions']) - Counter(old_method['unchecked_exceptions']))
+                    new_exceptions.extend([{'methodSignature': method['methodSignature'], 'new_exceptions': difference}])
 
-    new_exceptions = [entry for entry in new_exceptions if entry['new_exceptions'] or entry['new_java_exceptions_external']]
-    
-    with open((libraryOld + "->" + libraryNew + ".json"), 'w') as file:
+    new_exceptions = [entry for entry in new_exceptions if entry['new_exceptions']]
+
+    for entry in new_exceptions:
+        entry['new_exceptions'] = list(set(entry['new_exceptions']))
+
+    with open(('results/' + libraryOld + "->" + libraryNew + ".json"), 'w') as file:
         json.dump(new_exceptions, file, indent=4)
 
 def runExternalJavaSTLException(libraryOld, libraryNew):
-    jsonFilePathOld = libraryOld + '.json'
-    jsonFilePathNew = libraryNew + '.json'
+    jsonFilePathOld = 'results/' + libraryOld + '.json'
+    jsonFilePathNew = 'results/' + libraryNew + '.json'
 
     with open(jsonFilePathOld, 'r') as file:
         data = json.load(file)
@@ -123,13 +126,16 @@ def main():
     runAnalysisOnLibrary(args.libraryOld, args.libraryNew)
 
     # adding the transitive unchecked exceptions for the old and new version of the library - step 1
-    runInternalExceptionAddition(args.libraryOld, args.libraryNew)
+    # runInternalExceptionAddition(args.libraryOld, args.libraryNew)
 
     # adding the transitive unchecked exceptions for the old and new version of the library from the JAVA Standard library - step 2
-    runExternalJavaSTLException(args.libraryOld, args.libraryNew)
+    # runExternalJavaSTLException(args.libraryOld, args.libraryNew)
 
     # comparing the old and new version of the library - step final
     compareOldandNew(args.libraryOld, args.libraryNew)
 
 if __name__ == "__main__":
     main()
+
+# look at the classes, class herirarchy analysis or call graph analysis. traverse the call graph and then you look at the exceptions that calles have
+# and then you can add those exceptions to the current method.
