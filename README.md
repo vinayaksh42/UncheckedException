@@ -1,6 +1,6 @@
 # UncheckedException  
 
-A tool to identify and compare unchecked exceptions in Java applications and libraries.  
+A tool to identify and compare unchecked exceptions in Java applications and libraries
 ![image](https://github.com/user-attachments/assets/94236f3e-c39c-45b4-a911-7f331934eed3)
 
 ---
