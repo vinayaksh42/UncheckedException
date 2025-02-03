@@ -137,5 +137,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-# look at the classes, class herirarchy analysis or call graph analysis. traverse the call graph and then you look at the exceptions that calles have
-# and then you can add those exceptions to the current method.

@@ -31,6 +31,8 @@ import sootup.java.core.JavaSootMethod;
 import sootup.java.core.views.JavaView;
 
 public class Main {
+  static final String JAVA_LIBRARY_PATH = "resources/rt.jar";
+
   public static void main(String[] args) {
     if (args.length < 2) {
       System.err.println(
@@ -40,8 +42,13 @@ public class Main {
     String pathToJAR = args[0];
     String libraryName = args[1];
     boolean isLibrary = args[2].contains("library");
+
+    List<String> additionalJars = new ArrayList<>();
+    for (int i = 3; i < args.length; i++) {
+      additionalJars.add(args[i]);
+    }
     if (isLibrary) {
-      callgraphBasedLibraryAnalysis(pathToJAR, libraryName);
+      callgraphBasedLibraryAnalysis(pathToJAR, libraryName, additionalJars);
     } else {
       analyzeClientJAR(pathToJAR, libraryName);
     }
@@ -51,8 +58,7 @@ public class Main {
     JSONArray classArray = new JSONArray();
 
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation =
-        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
 
     for (SootClass sootClass : view.getClasses()) {
@@ -95,13 +101,11 @@ public class Main {
     String jarFile = pathToJAR;
     String rtJarFile = "resources/rt.jar";
 
-    AnalysisInputLocation inputlocationJARToAnalyze =
-        new JavaClassPathAnalysisInputLocation(jarFile, SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR =
-        new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
+    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(jarFile,
+        SourceType.Application);
+    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
 
-    List<AnalysisInputLocation> inputLocations =
-        ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
+    List<AnalysisInputLocation> inputLocations = ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
 
     JavaView view = new JavaView(inputLocations);
 
@@ -128,14 +132,13 @@ public class Main {
         Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
         List<Stmt> stmts = body.getStmts();
-        StmtVisitor stmtVisitor =
-            new StmtVisitor(
-                typehierarchy,
-                view,
-                bodyBuilder,
-                uncheckedExceptions,
-                internalMethodCalls,
-                externalMethodCalls);
+        StmtVisitor stmtVisitor = new StmtVisitor(
+            typehierarchy,
+            view,
+            bodyBuilder,
+            uncheckedExceptions,
+            internalMethodCalls,
+            externalMethodCalls);
         for (Stmt stmt : stmts) {
           stmt.accept(stmtVisitor);
         }
@@ -159,22 +162,21 @@ public class Main {
     }
   }
 
-  public static void callgraphBasedLibraryAnalysis(String pathToJAR, String libraryName) {
+  public static void callgraphBasedLibraryAnalysis(String pathToJAR, String libraryName, List<String> additionalJars) {
     JSONArray classArray = new JSONArray();
 
-    String jarFile = pathToJAR;
-    String rtJarFile = "resources/rt.jar";
-    String javaxCrypto = "resources/javax.crypto-1.0.2.jar";
+    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(pathToJAR,
+        SourceType.Application);
+    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(JAVA_LIBRARY_PATH,
+        SourceType.Library);
 
-    AnalysisInputLocation inputlocationJARToAnalyze =
-        new JavaClassPathAnalysisInputLocation(jarFile, SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR =
-        new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
-    AnalysisInputLocation inputlocationJavaxCrypto =
-        new JavaClassPathAnalysisInputLocation(javaxCrypto, SourceType.Library);
+    List<AnalysisInputLocation> inputLocations = new ArrayList<>();
+    inputLocations.add(inputlocationJARToAnalyze);
+    inputLocations.add(inputlocationRTJAR);
 
-    List<AnalysisInputLocation> inputLocations =
-        ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR, inputlocationJavaxCrypto);
+    for (String extraJar : additionalJars) {
+      inputLocations.add(new JavaClassPathAnalysisInputLocation(extraJar, SourceType.Library));
+    }
 
     JavaView view = new JavaView(inputLocations);
 
@@ -189,6 +191,12 @@ public class Main {
         List<ClassType> uncheckedExceptions = new ArrayList<>();
 
         if (method.isAbstract() || method.isNative()) {
+          continue;
+        }
+
+        try {
+          Body bodychecker = method.getBody();
+        } catch (Exception e) {
           continue;
         }
 
@@ -208,13 +216,18 @@ public class Main {
             if (sootMethod.isAbstract() || sootMethod.isNative()) {
               continue;
             }
-            Body body = sootMethod.getBody();
+            Body body;
+            try {
+              body = sootMethod.getBody();
+            } catch (Exception e) {
+              continue;
+            }
 
             Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
             List<Stmt> stmts = body.getStmts();
-            StmtCallGraphVisitor stmtVisitor =
-                new StmtCallGraphVisitor(typeHierarchy, bodyBuilder, uncheckedExceptions);
+            StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(typeHierarchy, bodyBuilder,
+                uncheckedExceptions);
             for (Stmt stmt : stmts) {
               stmt.accept(stmtVisitor);
             }
