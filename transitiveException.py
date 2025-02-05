@@ -2,6 +2,8 @@ import json
 import argparse
 import subprocess
 from collections import Counter
+import glob
+import os
 
 def find_method_signature(data, method_signature):
     for class_methods in data:
@@ -34,19 +36,30 @@ def update_transitive_unchecked_exceptions_external(data, externalData):
                 method['unchecked_java_exceptions_external'] = list(JAVASTL_unchecked_exceptions)
 
 def runAnalysisOnLibrary(libraryOld, libraryNew):
-    libraryOldPath = "resources/" + libraryOld + ".jar"
-    libraryNewPath = "resources/" + libraryNew + ".jar"
+    libraryOldPath = "dependency/" + libraryOld + ".jar"
+    libraryNewPath = "newdependency/" + libraryNew + ".jar"
 
-    # Invoke the JAR file for older version of the library
+    # Fetch all JAR files in the depofdepOld folder
+    depofdepOld_folder = "depofdepOld"
+    depofdepNew_folder = "depofdepNew"
+    jar_files = glob.glob(os.path.join(depofdepOld_folder, "*.jar"))
+
+
+    # Path to the main JAR file
     jar_path = 'target/unexpectedException-1.0-SNAPSHOT.jar'
-    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld, "library"])
+
+    # Invoke the JAR file for the older version of the library, passing JAR filenames as arguments
+    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld, "library"] + jar_files)
+
+    # Fetch all JAR files in the depofdepNew folder
+    jar_files = glob.glob(os.path.join(depofdepNew_folder, "*.jar"))
 
     # Invoke the JAR file for newer version of the library
-    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew, "library"])
+    subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew, "library"] + jar_files)
 
 def runInternalExceptionAddition(libraryOld, libraryNew):
-    jsonFilePathOld = 'results/' + libraryOld + '.json'
-    jsonFilePathNew = 'results/' + libraryNew + '.json'
+    jsonFilePathOld = 'tempRes/' + libraryOld + '.json'
+    jsonFilePathNew = 'tempRes/' + libraryNew + '.json'
 
     with open(jsonFilePathOld, 'r') as file:
         data = json.load(file)
@@ -65,8 +78,8 @@ def runInternalExceptionAddition(libraryOld, libraryNew):
         json.dump(data, file, indent=4)
 
 def compareOldandNew(libraryOld, libraryNew):
-    jsonFilePathOld = 'results/' + libraryOld + '.json'
-    jsonFilePathNew = 'results/' + libraryNew + '.json'
+    jsonFilePathOld = 'tempRes/' + libraryOld + '.json'
+    jsonFilePathNew = 'tempRes/' + libraryNew + '.json'
 
     with open(jsonFilePathOld, 'r') as file:
         dataOld = json.load(file)
@@ -89,7 +102,7 @@ def compareOldandNew(libraryOld, libraryNew):
     for entry in new_exceptions:
         entry['new_exceptions'] = list(set(entry['new_exceptions']))
 
-    with open(('results/' + libraryOld + "->" + libraryNew + ".json"), 'w') as file:
+    with open(('finalResults/' + libraryOld + "->" + libraryNew + ".json"), 'w') as file:
         json.dump(new_exceptions, file, indent=4)
 
 def runExternalJavaSTLException(libraryOld, libraryNew):

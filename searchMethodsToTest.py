@@ -1,4 +1,5 @@
 import json
+import argparse
 
 def load_json(filepath):
     with open(filepath, 'r') as file:
@@ -22,16 +23,17 @@ def find_external_calls(client_methods, library_methods):
     return external_calls
 
 def main():
-    client_json_path = '/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/results/httpclient5-5.0-beta6.json'
-    library_json_path = '/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/results/commons-codec-1.12->commons-codec-1.13.json'
-    output_json_path = '/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/results/external_calls.json'
+    parser = argparse.ArgumentParser(description='Process two library strings.')
+    parser.add_argument('ClientJsonPath', type=str, help='path to the json of client')
+    parser.add_argument('LibraryJsonPath', type=str, help='path to the json of library')
+    args = parser.parse_args()
 
-    client_methods = load_json(client_json_path)
-    library_methods = load_json(library_json_path)
+    client_methods = load_json(args.ClientJsonPath)
+    library_methods = load_json(args.LibraryJsonPath)
 
     external_calls = find_external_calls(client_methods, library_methods)
 
-    with open(output_json_path, 'w') as output_file:
+    with open('finalResults/MethodMatch.json', 'w') as output_file:
         json.dump(external_calls, output_file, indent=4)
 
 if __name__ == '__main__':

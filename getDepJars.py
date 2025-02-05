@@ -4,7 +4,10 @@ import os
 import sys
 import textwrap
 import subprocess
+import re
+import requests
 import shutil
+
 
 def create_maven_project_and_download_jars(
     dep_group_id, 
@@ -80,21 +83,83 @@ def create_maven_project_and_download_jars(
         sys.exit(e.returncode)
 
 
+def parse_jar_filename(jar_filename):
+    """
+    Extract artifactID and version from a jar file name.
+    Expects a format like: artifactID-version.jar
+    For example, 'asm-5.1.jar' returns ('asm', '5.1')
+    
+    This regex assumes the version starts with a digit and may include dots and hyphens (like SNAPSHOT).
+    """
+    basename = os.path.basename(jar_filename)
+    # Regex breakdown:
+    #   ^                   : start of string
+    #   (?P<artifact>.+)    : artifactID (one or more characters)
+    #   -                   : literal dash separator
+    #   (?P<version>\d[\d\.\-A-Za-z]+) : version starting with a digit and then digits, dots, hyphens, or letters
+    #   \.jar$              : ends with .jar
+    pattern = r'^(?P<artifact>.+)-(?P<version>\d[\d\.\-A-Za-z]+)\.jar$'
+    match = re.match(pattern, basename)
+    if not match:
+        raise ValueError("Jar file name does not match the expected pattern: artifactID-version.jar")
+    artifact = match.group("artifact")
+    version = match.group("version")
+    return artifact, version
+
+def query_maven_group(artifact, version):
+    """
+    Query Maven Central's API for the given artifact (artifactID) and version.
+    Returns the groupID if found, or None if not found.
+    """
+    # Maven Central Search API endpoint
+    url = "https://search.maven.org/solrsearch/select"
+    # Construct the query. The Maven API uses:
+    #   a:"artifact" AND v:"version"
+    params = {
+        "q": f'a:"{artifact}" AND v:"{version}"',
+        "rows": "20",
+        "wt": "json"
+    }
+    
+    response = requests.get(url, params=params)
+    if response.status_code != 200:
+        raise RuntimeError(f"Error querying Maven Central: HTTP {response.status_code}")
+    
+    data = response.json()
+    docs = data.get("response", {}).get("docs", [])
+    if not docs:
+        return None
+    
+    # The Maven API returns the groupId in the "g" field.
+    group_id = docs[0].get("g")
+    return group_id
+
 def main():
     """
     Usage:
-      create_and_run_maven_project.py <depGroupId> <depArtifactId> <depVersion>
+      getDepJars.py <JarName> <folderName>
 
     Example:
-      ./create_and_run_maven_project.py com.esotericsoftware.kryo kryo 3.0.3
+      ./getDepJars.py kryo-3.0.3.jar depofdepOld
     """
-    if len(sys.argv) != 4:
-        print("Usage: create_and_run_maven_project.py <depGroupId> <depArtifactId> <depVersion>")
+    if len(sys.argv) != 3:
+        print("Usage: getDepJars.py <JarName> <folderName>")
         sys.exit(1)
 
-    dep_group_id = sys.argv[1]
-    dep_artifact_id = sys.argv[2]
-    dep_version = sys.argv[3]
+    jar_file = sys.argv[1]
+    folder_name = sys.argv[2]
+    
+    try:
+        dep_artifact_id, dep_version = parse_jar_filename(jar_file)
+    except ValueError as ve:
+        print("Error:", ve)
+        sys.exit(1)
+
+    try:
+        dep_group_id = query_maven_group(dep_artifact_id, dep_version)
+    except Exception as e:
+        print("Error querying Maven Central:", e)
+        sys.exit(1)
 
     # Customize the project directory and base coordinates if you like
     project_dir = "my-maven-project"
@@ -113,7 +178,7 @@ def main():
     )
     excluded_jar = f"{dep_artifact_id}-{dep_version}.jar"
     jars_to_return = []
-    resource_folder = os.path.join(os.path.dirname(project_dir), "resources")
+    resource_folder = os.path.join(os.path.dirname(project_dir), folder_name)
     os.makedirs(resource_folder, exist_ok=True)
     libs_path = os.path.join(project_dir, "libs")
     if os.path.isdir(libs_path):
@@ -124,6 +189,9 @@ def main():
                 shutil.copy2(os.path.join(libs_path, jar_file), resource_folder)
     shutil.rmtree(project_dir)
     print("\n".join(jars_to_return))
+    excluded_jar_path = os.path.join(folder_name, excluded_jar)
+    if os.path.isfile(excluded_jar_path):
+        os.remove(excluded_jar_path)
 
 
 if __name__ == "__main__":

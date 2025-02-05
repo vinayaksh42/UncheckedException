@@ -58,7 +58,8 @@ public class Main {
     JSONArray classArray = new JSONArray();
 
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
 
     for (SootClass sootClass : view.getClasses()) {
@@ -88,7 +89,7 @@ public class Main {
       classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));
     }
 
-    try (FileWriter file = new FileWriter("results/" + clientName + ".json")) {
+    try (FileWriter file = new FileWriter("client_results/" + clientName + ".json")) {
       file.write(classArray.toString(4));
     } catch (IOException e) {
       e.printStackTrace();
@@ -101,11 +102,13 @@ public class Main {
     String jarFile = pathToJAR;
     String rtJarFile = "resources/rt.jar";
 
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(jarFile,
-        SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(jarFile, SourceType.Application);
+    AnalysisInputLocation inputlocationRTJAR =
+        new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
 
-    List<AnalysisInputLocation> inputLocations = ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
+    List<AnalysisInputLocation> inputLocations =
+        ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
 
     JavaView view = new JavaView(inputLocations);
 
@@ -132,13 +135,14 @@ public class Main {
         Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
         List<Stmt> stmts = body.getStmts();
-        StmtVisitor stmtVisitor = new StmtVisitor(
-            typehierarchy,
-            view,
-            bodyBuilder,
-            uncheckedExceptions,
-            internalMethodCalls,
-            externalMethodCalls);
+        StmtVisitor stmtVisitor =
+            new StmtVisitor(
+                typehierarchy,
+                view,
+                bodyBuilder,
+                uncheckedExceptions,
+                internalMethodCalls,
+                externalMethodCalls);
         for (Stmt stmt : stmts) {
           stmt.accept(stmtVisitor);
         }
@@ -162,13 +166,20 @@ public class Main {
     }
   }
 
-  public static void callgraphBasedLibraryAnalysis(String pathToJAR, String libraryName, List<String> additionalJars) {
+  public static void callgraphBasedLibraryAnalysis(String pathToJAR, String library) {
+    // Overload that defaults 'additionalJars' to empty
+    List<String> additonalJars = new ArrayList<>();
+    callgraphBasedLibraryAnalysis(pathToJAR, library, additonalJars);
+  }
+
+  public static void callgraphBasedLibraryAnalysis(
+      String pathToJAR, String libraryName, List<String> additionalJars) {
     JSONArray classArray = new JSONArray();
 
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(pathToJAR,
-        SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(JAVA_LIBRARY_PATH,
-        SourceType.Library);
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(pathToJAR, SourceType.Application);
+    AnalysisInputLocation inputlocationRTJAR =
+        new JavaClassPathAnalysisInputLocation(JAVA_LIBRARY_PATH, SourceType.Library);
 
     List<AnalysisInputLocation> inputLocations = new ArrayList<>();
     inputLocations.add(inputlocationJARToAnalyze);
@@ -226,8 +237,8 @@ public class Main {
             Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
             List<Stmt> stmts = body.getStmts();
-            StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(typeHierarchy, bodyBuilder,
-                uncheckedExceptions);
+            StmtCallGraphVisitor stmtVisitor =
+                new StmtCallGraphVisitor(typeHierarchy, bodyBuilder, uncheckedExceptions);
             for (Stmt stmt : stmts) {
               stmt.accept(stmtVisitor);
             }
@@ -244,7 +255,7 @@ public class Main {
       classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));
     }
 
-    try (FileWriter file = new FileWriter("results/" + libraryName + ".json")) {
+    try (FileWriter file = new FileWriter("tempRes/" + libraryName + ".json")) {
       file.write(classArray.toString(4));
     } catch (IOException e) {
       e.printStackTrace();

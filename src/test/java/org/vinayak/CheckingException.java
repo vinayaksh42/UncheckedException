@@ -2,7 +2,6 @@ package org.vinayak;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 public class CheckingException {
@@ -43,5 +42,12 @@ public class CheckingException {
     String pathToBinary = "resources/rtree-0.8.6.jar";
     String classTypeStr = "rtree-0.8.6";
     Main.analyzeClientJAR(pathToBinary, classTypeStr);
+  }
+
+  @Test
+  public void testAnalyzeBinaryReflectasm() {
+    String pathToBinary = "client_jar/reflectasm-1.11.10-SNAPSHOT.jar";
+    String classTypeStr = "reflectasm-1.11.10-SNAPSHOT";
+    Main.main(new String[] {pathToBinary, classTypeStr, "client"});
   }
 }
