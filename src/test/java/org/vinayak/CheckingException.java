@@ -38,9 +38,15 @@ public class CheckingException {
   }
 
   @Test
+  public void testAnalyzeTheError() {
+    String pathToBinary = "resources/kryo-5.6.2.jar";
+    Main.analyzeLibraryJAR(pathToBinary, "kryo-5.6.2");
+  }
+
+  @Test
   public void testAnalyzeBinaryHttpclient5() {
-    String pathToBinary = "resources/rtree-0.8.6.jar";
-    String classTypeStr = "rtree-0.8.6";
+    String pathToBinary = "client/client_jar/reflectasm-1.11.10-SNAPSHOT.jar";
+    String classTypeStr = "reflectasm-1.11.10";
     Main.analyzeClientJAR(pathToBinary, classTypeStr);
   }
 
@@ -48,6 +54,12 @@ public class CheckingException {
   public void testAnalyzeBinaryReflectasm() {
     String pathToBinary = "client_jar/reflectasm-1.11.10-SNAPSHOT.jar";
     String classTypeStr = "reflectasm-1.11.10-SNAPSHOT";
-    Main.main(new String[] {pathToBinary, classTypeStr, "client"});
+    Main.main(new String[] { pathToBinary, classTypeStr, "client" });
+  }
+
+  @Test
+  public void sootCrash() {
+    String pathToBinary = "resources/kryo-5.6.2.jar";
+    Main.methodBodyAnalysis(pathToBinary);
   }
 }
