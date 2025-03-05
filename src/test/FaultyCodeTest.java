@@ -2,28 +2,18 @@ package org.vinayak;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import sootup.core.inputlocation.AnalysisInputLocation;
-import sootup.core.jimple.common.expr.JVirtualInvokeExpr;
-import sootup.core.jimple.common.stmt.JInvokeStmt;
 import sootup.core.jimple.common.stmt.Stmt;
 import sootup.core.model.Body;
 import sootup.core.model.SootClass;
 import sootup.core.model.SootMethod;
-import sootup.core.signatures.MethodSignature;
-import sootup.core.types.ClassType;
 import sootup.core.views.View;
 import sootup.java.bytecode.inputlocation.PathBasedAnalysisInputLocation;
-import sootup.java.core.language.JavaJimple;
 import sootup.java.core.views.JavaView;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.jupiter.api.Test;
 
 public class FaultyCodeTest {
     @Test

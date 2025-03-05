@@ -3,8 +3,6 @@ package org.vinayak;
 import com.google.common.collect.ImmutableList;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
-import java.lang.invoke.SerializedLambda;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,13 +26,16 @@ import sootup.core.typehierarchy.ViewTypeHierarchy;
 import sootup.core.types.ClassType;
 import sootup.core.views.View;
 import sootup.java.bytecode.inputlocation.JavaClassPathAnalysisInputLocation;
+import sootup.java.bytecode.inputlocation.JrtFileSystemAnalysisInputLocation;
 import sootup.java.bytecode.inputlocation.PathBasedAnalysisInputLocation;
 import sootup.java.core.JavaSootMethod;
 import sootup.java.core.views.JavaView;
 
 public class Main {
-  static final String JAVA_LIBRARY_PATH = "resources/rt.jar";
-  static final String JAVA_JCE_PATH = "resources/jce.jar";
+  static final String JAVA_LIBRARY_PATH =
+      "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/rt.jar";
+  static final String JAVA_JCE_PATH =
+      "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/jce.jar";
 
   public static void main(String[] args) {
     if (args.length < 2) {
@@ -44,16 +45,37 @@ public class Main {
     }
     String pathToJAR = args[0];
     String libraryName = args[1];
-    boolean isLibrary = args[2].contains("library");
+    String type = args[2];
 
     List<String> additionalJars = new ArrayList<>();
     for (int i = 3; i < args.length; i++) {
       additionalJars.add(args[i]);
     }
-    if (isLibrary) {
+    if (type.contains("library")) {
       callgraphBasedLibraryAnalysis(pathToJAR, libraryName, additionalJars);
+    } else if (type.contains("jarAnalysis")) {
+      getJarPackageNames(pathToJAR, libraryName);
     } else {
       analyzeClientJAR(pathToJAR, libraryName);
+    }
+  }
+
+  public static void getJarPackageNames(String pathToJAR, String libraryName) {
+    Path path = Paths.get(pathToJAR);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    View view = new JavaView(inputLocation);
+    JSONArray methodNameArray = new JSONArray();
+    for (SootClass sootClass : view.getClasses()) {
+      // save the package name in json
+      for (SootMethod method : sootClass.getMethods()) {
+        methodNameArray.put(method.getSignature());
+      }
+    }
+    try (FileWriter file = new FileWriter("../client/temp/" + libraryName + ".json")) {
+      file.write(methodNameArray.toString(4));
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -61,7 +83,8 @@ public class Main {
     JSONArray classArray = new JSONArray();
 
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
 
     for (SootClass sootClass : view.getClasses()) {
@@ -104,11 +127,13 @@ public class Main {
     String jarFile = pathToJAR;
     String rtJarFile = JAVA_LIBRARY_PATH;
 
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(jarFile,
-        SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(jarFile, SourceType.Application);
+    AnalysisInputLocation inputlocationRTJAR =
+        new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
 
-    List<AnalysisInputLocation> inputLocations = ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
+    List<AnalysisInputLocation> inputLocations =
+        ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
 
     JavaView view = new JavaView(inputLocations);
 
@@ -129,8 +154,11 @@ public class Main {
         if (method.isAbstract() || method.isNative()) {
           continue;
         }
-        if (method.getSignature().toString().contains(
-            "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
+        if (method
+            .getSignature()
+            .toString()
+            .contains(
+                "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
           System.out.println("Method: " + method.getSignature());
         }
         Body body;
@@ -141,19 +169,23 @@ public class Main {
         }
 
         Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
-        if (method.getSignature().toString().contains(
-            "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
+        if (method
+            .getSignature()
+            .toString()
+            .contains(
+                "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
           System.out.println("Method: " + method.getSignature());
           System.out.println("-----------------------------------------");
 
           List<Stmt> stmts = body.getStmts();
-          StmtVisitor stmtVisitor = new StmtVisitor(
-              typehierarchy,
-              view,
-              bodyBuilder,
-              uncheckedExceptions,
-              internalMethodCalls,
-              externalMethodCalls);
+          StmtVisitor stmtVisitor =
+              new StmtVisitor(
+                  typehierarchy,
+                  view,
+                  bodyBuilder,
+                  uncheckedExceptions,
+                  internalMethodCalls,
+                  externalMethodCalls);
           for (Stmt stmt : stmts) {
             System.out.println(stmt);
             stmt.accept(stmtVisitor);
@@ -181,7 +213,8 @@ public class Main {
 
   public static void methodBodyAnalysis(String pathToJAR) {
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
     final ViewTypeHierarchy typeHierarchy = new ViewTypeHierarchy(view);
     for (SootClass sootClass : view.getClasses()) {
@@ -190,14 +223,17 @@ public class Main {
         if (method.isAbstract() || method.isNative()) {
           continue;
         }
-        if (method.getSignature().toString().contains(
-            "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
+        if (method
+            .getSignature()
+            .toString()
+            .contains(
+                "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
           Body body = method.getBody();
           Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
           System.out.println("Method: " + method.getSignature());
           List<Stmt> stmts = body.getStmts();
-          StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(typeHierarchy, bodyBuilder,
-              uncheckedExceptions);
+          StmtCallGraphVisitor stmtVisitor =
+              new StmtCallGraphVisitor(typeHierarchy, bodyBuilder, uncheckedExceptions);
           for (Stmt stmt : stmts) {
             System.out.println(stmt);
             stmt.accept(stmtVisitor);
@@ -217,17 +253,12 @@ public class Main {
       String pathToJAR, String libraryName, List<String> additionalJars) {
     JSONArray classArray = new JSONArray();
 
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(pathToJAR,
-        SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(JAVA_LIBRARY_PATH,
-        SourceType.Library);
-    AnalysisInputLocation inputlocationJCEJAR = new JavaClassPathAnalysisInputLocation(JAVA_JCE_PATH,
-        SourceType.Library);
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(pathToJAR, SourceType.Application);
 
     List<AnalysisInputLocation> inputLocations = new ArrayList<>();
     inputLocations.add(inputlocationJARToAnalyze);
-    inputLocations.add(inputlocationRTJAR);
-    inputLocations.add(inputlocationJCEJAR);
+    inputLocations.add(new JrtFileSystemAnalysisInputLocation(SourceType.Library));
 
     for (String extraJar : additionalJars) {
       inputLocations.add(new JavaClassPathAnalysisInputLocation(extraJar, SourceType.Library));
@@ -262,7 +293,13 @@ public class Main {
         // Create CG by initializing CHA with entry method(s)
         MethodSignature entryMethodSignature = method.getSignature();
 
-        CallGraph cg = cha.initialize(Collections.singletonList(entryMethodSignature));
+        CallGraph cg;
+        try {
+          cg = cha.initialize(Collections.singletonList(entryMethodSignature));
+        } catch (Exception e) {
+          continue;
+        }
+
         for (MethodSignature methodSignature : cg.getMethodSignatures()) {
           Optional<JavaSootMethod> calledMethod = view.getMethod(methodSignature);
           // iterate over all the methods in calledMethod
@@ -281,8 +318,8 @@ public class Main {
             Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
             List<Stmt> stmts = body.getStmts();
-            StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(typeHierarchy, bodyBuilder,
-                uncheckedExceptions);
+            StmtCallGraphVisitor stmtVisitor =
+                new StmtCallGraphVisitor(typeHierarchy, bodyBuilder, uncheckedExceptions);
             for (Stmt stmt : stmts) {
               stmt.accept(stmtVisitor);
             }
