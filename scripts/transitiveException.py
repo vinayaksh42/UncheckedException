@@ -29,7 +29,7 @@ def runAnalysisOnLibrary(libraryOld, libraryNew):
         print(f"Library {libraryOld} already analyzed")
     else:
         # Invoke the JAR file for the older version of the library, passing JAR filenames as arguments
-        subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld, "library"] + jar_files)
+        subprocess.run(['java', '-Xmx8g', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld, "library"] + jar_files)
 
     # Fetch all JAR files in the depofdepNew folder
     jar_files = glob.glob(os.path.join(depofdepNew_folder, "*.jar"))
@@ -38,7 +38,7 @@ def runAnalysisOnLibrary(libraryOld, libraryNew):
     if os.path.exists('../LibraryResult/' + libraryNew + '.json'):
         print(f"Library {libraryNew} already analyzed")
     else:
-        subprocess.run(['java', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew, "library"] + jar_files)
+        subprocess.run(['java', '-Xmx8g', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew, "library"] + jar_files)
 
 def compareOldandNew(libraryOld, libraryNew):
     jsonFilePathOld = '../LibraryResult/' + libraryOld + '.json'
