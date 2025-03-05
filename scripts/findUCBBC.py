@@ -127,18 +127,72 @@ def get_commit_sha(owner_repo):
         return None
 
 # function to save the results in a pre existing csv file if not then create a new one with the header
-def saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name):
+def saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name,match_dir):
     print(f"Saving the results in {final_result}/results.csv")
 
     # check if the file exists
     if not os.path.exists(final_result + "/results.csv"):
         with open(final_result + "/results.csv", "w", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow(["ClientName","OwnerRepo","CommitSha","LibraryOld", "LibraryNew", "Match Results", "Time"])
+            writer.writerow(["ClientName","OwnerRepo","CommitSha","LibraryOld", "LibraryNew", "Match Results", "Time", "GitHubRepo", "NumberOfMatchedMethods"])
+    
+    # open the Match results in ../Match folder for the client
+    with open(match_dir + "/" + final_result_name) as match_file:
+        match_data = json.load(match_file)
     
     with open(final_result + "/results.csv", "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow([client_name, owner_repo, commit_sha, libraryOld, libraryNew, "https://github.com/vinayaksh42/UncheckedException/tree/main/Match/" + final_result_name, datetime.datetime.now()])
+        writer.writerow([client_name, owner_repo, commit_sha, libraryOld, libraryNew, "https://github.com/vinayaksh42/UncheckedException/tree/main/Match/" + final_result_name, datetime.datetime.now(), "github,com/" + owner_repo, len(match_data)])
+    
+    # Create combined results CSV
+    results_csv_path = final_result + "/results.csv"
+    combined_results_csv_path = final_result + "/combined_results.csv"
+
+    # Read the results.csv file into a dictionary
+    results_dict = {}
+    with open(results_csv_path, mode='r', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            results_dict[row['Match Results']] = row
+
+    # Create combined results CSV
+    results_csv_path = final_result + "/results.csv"
+    combined_results_csv_path = final_result + "/combined_results.csv"
+
+    # Read the results.csv file into a dictionary
+    results_dict = {}
+    with open(results_csv_path, mode='r', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            results_dict[row['Match Results']] = row
+
+    # Create the output CSV file
+    with open(combined_results_csv_path, mode='w', newline='') as csvfile:
+        fieldnames = ['ClientName', 'OwnerRepo', 'GitHubOwnerRepo', 'LibraryOld', 'LibraryNew', 'CommitSha', 'ClientMethod', 'ExternalCall']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        # Iterate over each JSON file in the Match folder
+        for filename in os.listdir(match_dir):
+            if filename.endswith('.json'):
+                json_path = os.path.join(match_dir, filename)
+                with open(json_path, 'r') as jsonfile:
+                    match_data = json.load(jsonfile)
+                    match_results_url = f"https://github.com/vinayaksh42/UncheckedException/tree/main/Match/{filename}"
+                    
+                    if match_results_url in results_dict:
+                        result_row = results_dict[match_results_url]
+                        for entry in match_data:
+                            writer.writerow({
+                                'ClientName': result_row['ClientName'],
+                                'OwnerRepo': result_row['OwnerRepo'],
+                                'GitHubOwnerRepo': result_row['GitHubRepo'],
+                                'LibraryOld': result_row['LibraryOld'],
+                                'LibraryNew': result_row['LibraryNew'],
+                                'CommitSha': result_row['CommitSha'],
+                                'ClientMethod': entry['client_method'],
+                                'ExternalCall': entry['external_call']
+                            })
 
 def main():
     if len(sys.argv) < 1:
@@ -289,7 +343,7 @@ def main():
                 # 9A - Search methods in the client that might have a BBC due to the newly added unchecked exception
                 subprocess.run(['python', 'searchMethodsToTest.py', '../client/client_results/' + client_name + '.json', '../CompareResult/' + libraryOld + "->" + libraryNew + ".json" , '../Match/' + final_result_name])
                 # 10A - save the results in a csv file, save the client repo url, library names, library version, matched methods, git commit sha, and the time of the analysis
-                saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name)
+                saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name,match_dir)
                 continue
 
             # 9B - Download the dependencies of the dependencies
@@ -304,7 +358,7 @@ def main():
             # 11B - Search methods in the client that might have a BBC due to the newly added unchecked exception
             subprocess.run(['python', 'searchMethodsToTest.py', '../client/client_results/' + client_name + '.json', '../CompareResult/' + libraryOld + "->" + libraryNew + ".json" , '../Match/' + final_result_name])
             # 12B - save the results in a csv file, save the client repo url, library names, library version, matched methods, git commit sha, and the time of the analysis
-            saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name)
+            saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name,match_dir)
 
         for directory in setup_dirs:
             # CleanUp
