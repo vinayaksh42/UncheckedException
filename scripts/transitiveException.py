@@ -13,7 +13,7 @@ def find_method_signature(data, method_signature):
                     return method
     return None
 
-def runAnalysisOnLibrary(libraryOld, libraryNew):
+def runAnalysisOnLibrary(libraryOld, libraryNew, matchedMethodsDir):
     libraryOldPath = "../client/dep_old/" + libraryOld + ".jar"
     libraryNewPath = "../client/dep_new/" + libraryNew + ".jar"
 
@@ -25,20 +25,14 @@ def runAnalysisOnLibrary(libraryOld, libraryNew):
     jar_files = glob.glob(os.path.join(depofdepOld_folder, "*.jar"))
 
     # check if library is already analyzed
-    if os.path.exists('../LibraryResult/' + libraryOld + '.json'):
-        print(f"Library {libraryOld} already analyzed")
-    else:
-        # Invoke the JAR file for the older version of the library, passing JAR filenames as arguments
-        subprocess.run(['java', '-Xmx8g', '-cp', jar_path, "org.vinayak.Main", libraryOldPath, libraryOld, "library"] + jar_files)
+    # Invoke the JAR file for the older version of the library, passing JAR filenames as arguments
+    subprocess.run(['java', '-Xmx8g', '-cp', jar_path, "org.vinayak.Main","callgraphBasedLibraryAnalysis", libraryOldPath, libraryOld, matchedMethodsDir] + jar_files)
 
     # Fetch all JAR files in the depofdepNew folder
     jar_files = glob.glob(os.path.join(depofdepNew_folder, "*.jar"))
 
     # Invoke the JAR file for newer version of the library
-    if os.path.exists('../LibraryResult/' + libraryNew + '.json'):
-        print(f"Library {libraryNew} already analyzed")
-    else:
-        subprocess.run(['java', '-Xmx8g', '-cp', jar_path, "org.vinayak.Main", libraryNewPath, libraryNew, "library"] + jar_files)
+    subprocess.run(['java', '-Xmx8g', '-cp', jar_path, "org.vinayak.Main", "callgraphBasedLibraryAnalysis",libraryNewPath, libraryNew, matchedMethodsDir] + jar_files)
 
 def compareOldandNew(libraryOld, libraryNew):
     jsonFilePathOld = '../LibraryResult/' + libraryOld + '.json'
@@ -65,7 +59,7 @@ def compareOldandNew(libraryOld, libraryNew):
     for entry in new_exceptions:
         entry['new_exceptions'] = list(set(entry['new_exceptions']))
 
-    with open(('../CompareResult/' + libraryOld + "->" + libraryNew + ".json"), 'w') as file:
+    with open(('../CompareResult/' + libraryOld + "#" + libraryNew + ".json"), 'w') as file:
         json.dump(new_exceptions, file, indent=4)
 
 
@@ -73,10 +67,11 @@ def main():
     parser = argparse.ArgumentParser(description='Process two library strings.')
     parser.add_argument('libraryOld', type=str, help='The old library string')
     parser.add_argument('libraryNew', type=str, help='The new library string')
+    parser.add_argument('matchedMethodsDir', type=str, help='Methods to analyze')
     args = parser.parse_args()
 
     # generates the JSON files for the old and new version of the library
-    runAnalysisOnLibrary(args.libraryOld, args.libraryNew)
+    runAnalysisOnLibrary(args.libraryOld, args.libraryNew, args.matchedMethodsDir)
 
     # comparing the old and new version of the library
     compareOldandNew(args.libraryOld, args.libraryNew)
