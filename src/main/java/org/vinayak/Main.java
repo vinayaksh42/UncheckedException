@@ -3,13 +3,17 @@ package org.vinayak;
 import com.google.common.collect.ImmutableList;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import sootup.callgraph.CallGraph;
 import sootup.callgraph.CallGraphAlgorithm;
@@ -38,29 +42,56 @@ public class Main {
       "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/jce.jar";
 
   public static void main(String[] args) {
-    if (args.length < 2) {
+    if (args.length < 1) {
       System.err.println(
-          "Usage: java -jar unexpectedException-1.0-SNAPSHOT.jar <path-to-JAR> <library-name> <library/client>");
+          "Specify mode: analyzeLibraryMethods | analyzeClient | callgraphBasedLibraryAnalysis");
       System.exit(1);
     }
-    String pathToJAR = args[0];
-    String libraryName = args[1];
-    String type = args[2];
 
-    List<String> additionalJars = new ArrayList<>();
-    for (int i = 3; i < args.length; i++) {
-      additionalJars.add(args[i]);
-    }
-    if (type.contains("library")) {
-      callgraphBasedLibraryAnalysis(pathToJAR, libraryName, additionalJars);
-    } else if (type.contains("jarAnalysis")) {
-      getJarPackageNames(pathToJAR, libraryName);
-    } else {
-      analyzeClientJAR(pathToJAR, libraryName);
+    String mode = args[0];
+
+    switch (mode) {
+      case "analyzeLibraryMethods":
+        analyzeLibraryMethods(Arrays.copyOfRange(args, 1, args.length));
+        break;
+
+      case "analyzeClient":
+        analyzeClient(Arrays.copyOfRange(args, 1, args.length));
+        break;
+
+      case "callgraphBasedLibraryAnalysis":
+        if (args.length < 4) {
+          System.err.println(
+              "Usage: callgraphBasedLibraryAnalysis <path-to-JAR> <library-name> <MatchedMethods.json File> <additionalJars>");
+          System.exit(1);
+        }
+        callgraphBasedLibraryAnalysis(
+            args[1], args[2], Arrays.asList(Arrays.copyOfRange(args, 4, args.length)), args[3]);
+        break;
+
+      default:
+        System.err.println("Unknown mode: " + mode);
+        System.exit(1);
     }
   }
 
-  public static void getJarPackageNames(String pathToJAR, String libraryName) {
+  public static void analyzeClient(String[] args) {
+    if (args.length < 2) {
+      System.err.println("Usage: analyzeClient <path-to-JAR> <client-name>");
+      System.exit(1);
+    }
+    analyzeClientJAR(args[0], args[1]);
+  }
+
+  public static void analyzeLibraryMethods(String[] args) {
+    if (args.length < 2) {
+      System.err.println("Usage: analyzeLibraryMethods <path-to-JAR> <library-name>");
+      System.exit(1);
+    }
+    recordMethodSignaturesForJar(args[0], args[1]);
+  }
+
+  public static void recordMethodSignaturesForJar(String pathToJAR, String libraryName) {
     Path path = Paths.get(pathToJAR);
     AnalysisInputLocation inputLocation =
         PathBasedAnalysisInputLocation.create(path, SourceType.Application);
@@ -211,47 +242,64 @@ public class Main {
     }
   }
 
-  public static void methodBodyAnalysis(String pathToJAR) {
-    Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation =
-        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
-    View view = new JavaView(inputLocation);
-    final ViewTypeHierarchy typeHierarchy = new ViewTypeHierarchy(view);
-    for (SootClass sootClass : view.getClasses()) {
-      List<ClassType> uncheckedExceptions = new ArrayList<>();
-      for (SootMethod method : sootClass.getMethods()) {
-        if (method.isAbstract() || method.isNative()) {
-          continue;
-        }
-        if (method
-            .getSignature()
-            .toString()
-            .contains(
-                "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
-          Body body = method.getBody();
-          Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
-          System.out.println("Method: " + method.getSignature());
-          List<Stmt> stmts = body.getStmts();
-          StmtCallGraphVisitor stmtVisitor =
-              new StmtCallGraphVisitor(typeHierarchy, bodyBuilder, uncheckedExceptions);
-          for (Stmt stmt : stmts) {
-            System.out.println(stmt);
-            stmt.accept(stmtVisitor);
-          }
-          System.out.println("-----------------------------------------");
-        }
-      }
-    }
-  }
+  // public static void methodBodyAnalysis(String pathToJAR) {
+  // Path path = Paths.get(pathToJAR);
+  // AnalysisInputLocation inputLocation =
+  // PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+  // View view = new JavaView(inputLocation);
+  // final ViewTypeHierarchy typeHierarchy = new ViewTypeHierarchy(view);
+  // for (SootClass sootClass : view.getClasses()) {
+  // List<ClassType> uncheckedExceptions = new ArrayList<>();
+  // for (SootMethod method : sootClass.getMethods()) {
+  // if (method.isAbstract() || method.isNative()) {
+  // continue;
+  // }
+  // if (method
+  // .getSignature()
+  // .toString()
+  // .contains(
+  // "<com.esotericsoftware.kryo.serializers.ClosureSerializer:
+  // java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
+  // Body body = method.getBody();
+  // Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
+  // System.out.println("Method: " + method.getSignature());
+  // List<Stmt> stmts = body.getStmts();
+  // StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(typeHierarchy,
+  // bodyBuilder, uncheckedExceptions);
+  // for (Stmt stmt : stmts) {
+  // System.out.println(stmt);
+  // stmt.accept(stmtVisitor);
+  // }
+  // System.out.println("-----------------------------------------");
+  // }
+  // }
+  // }
+  // }
 
-  public static void callgraphBasedLibraryAnalysis(String pathToJAR, String library) {
+  public static void callgraphBasedLibraryAnalysis(
+      String pathToJAR, String library, String MatchedMethods) {
     List<String> additonalJars = new ArrayList<>();
-    callgraphBasedLibraryAnalysis(pathToJAR, library, additonalJars);
+    callgraphBasedLibraryAnalysis(pathToJAR, library, additonalJars, MatchedMethods);
   }
 
   public static void callgraphBasedLibraryAnalysis(
-      String pathToJAR, String libraryName, List<String> additionalJars) {
+      String pathToJAR, String libraryName, List<String> additionalJars, String MatchedMethods) {
     JSONArray classArray = new JSONArray();
+
+    // Read the JSON file and store the contents of the array in a list of strings
+    List<String> matchedMethodsList = new ArrayList<>();
+    try {
+      String content =
+          new String(Files.readAllBytes(Paths.get(MatchedMethods)), StandardCharsets.UTF_8);
+      JSONArray matchedMethodsArray = new JSONArray(content);
+      for (int i = 0; i < matchedMethodsArray.length(); i++) {
+        matchedMethodsList.add(matchedMethodsArray.getString(i));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (JSONException e) {
+      System.err.println("Error parsing JSON content: " + e.getMessage());
+    }
 
     AnalysisInputLocation inputlocationJARToAnalyze =
         new JavaClassPathAnalysisInputLocation(pathToJAR, SourceType.Application);
@@ -265,6 +313,7 @@ public class Main {
     }
 
     JavaView view = new JavaView(inputLocations);
+    View viewJar = new JavaView(inputlocationJARToAnalyze);
 
     for (SootClass sootClass : view.getClasses()) {
       JSONArray methodsArray = new JSONArray();
@@ -274,7 +323,12 @@ public class Main {
       }
 
       for (SootMethod method : sootClass.getMethods()) {
-        List<ClassType> uncheckedExceptions = new ArrayList<>();
+        List<String> uncheckedExceptions = new ArrayList<>();
+
+        // check if method is part of matchedMethodsList
+        if (!matchedMethodsList.contains(method.getSignature().toString())) {
+          continue;
+        }
 
         if (method.isAbstract() || method.isNative()) {
           continue;
@@ -288,7 +342,7 @@ public class Main {
 
         // Create type hierarchy and CHA
         final ViewTypeHierarchy typeHierarchy = new ViewTypeHierarchy(view);
-        CallGraphAlgorithm cha = new ClassHierarchyAnalysisAlgorithm(view);
+        CallGraphAlgorithm cha = new ClassHierarchyAnalysisAlgorithm(viewJar);
 
         // Create CG by initializing CHA with entry method(s)
         MethodSignature entryMethodSignature = method.getSignature();
@@ -319,7 +373,11 @@ public class Main {
 
             List<Stmt> stmts = body.getStmts();
             StmtCallGraphVisitor stmtVisitor =
-                new StmtCallGraphVisitor(typeHierarchy, bodyBuilder, uncheckedExceptions);
+                new StmtCallGraphVisitor(
+                    typeHierarchy,
+                    bodyBuilder,
+                    uncheckedExceptions,
+                    method.getSignature().toString());
             for (Stmt stmt : stmts) {
               stmt.accept(stmtVisitor);
             }
@@ -328,9 +386,7 @@ public class Main {
 
         JSONObject methodObject = new JSONObject();
         methodObject.put("methodSignature", method.getSignature());
-        methodObject.put(
-            "unchecked_exceptions",
-            uncheckedExceptions.stream().map(ClassType::toString).toArray());
+        methodObject.put("unchecked_exceptions", uncheckedExceptions.stream().toArray());
         methodsArray.put(methodObject);
       }
       classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));

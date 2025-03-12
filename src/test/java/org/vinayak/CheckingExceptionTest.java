@@ -2,17 +2,15 @@ package org.vinayak;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class CheckingExceptionTest {
-  @Test
-  public void testAnalyzeBinaryAsmOld() {
-    String pathToBinary = "resources/asm-5.1.jar";
-    String classTypeStr = "asm-5.1";
-    Main.callgraphBasedLibraryAnalysis(pathToBinary, classTypeStr);
-  }
+  // @Test
+  // public void testAnalyzeBinaryAsmOld() {
+  // String pathToBinary = "resources/asm-5.1.jar";
+  // String classTypeStr = "asm-5.1";
+  // Main.callgraphBasedLibraryAnalysis(pathToBinary, classTypeStr);
+  // }
 
   @Test
   public void testAnalyzeBinaryAsmNew() {
@@ -28,16 +26,17 @@ public class CheckingExceptionTest {
     Main.analyzeLibraryJAR(pathToBinary, classTypeStr);
   }
 
-  @Test
-  public void testAnalyzeBinaryKryoNewFaulty() {
-    String pathToBinary = "resources/kryo-5.6.2.jar";
-    String classTypeStr = "kryo-5.6.2";
-    List<String> additonalJars = new ArrayList<>();
-    additonalJars.add("resources/minlog-1.3.1.jar");
-    additonalJars.add("resources/objenesis-3.4.jar");
-    additonalJars.add("resources/reflectasm-1.11.9.jar");
-    Main.callgraphBasedLibraryAnalysis(pathToBinary, classTypeStr, additonalJars);
-  }
+  // @Test
+  // public void testAnalyzeBinaryKryoNewFaulty() {
+  // String pathToBinary = "resources/kryo-5.6.2.jar";
+  // String classTypeStr = "kryo-5.6.2";
+  // List<String> additonalJars = new ArrayList<>();
+  // additonalJars.add("resources/minlog-1.3.1.jar");
+  // additonalJars.add("resources/objenesis-3.4.jar");
+  // additonalJars.add("resources/reflectasm-1.11.9.jar");
+  // Main.callgraphBasedLibraryAnalysis(pathToBinary, classTypeStr,
+  // additonalJars);
+  // }
 
   @Test
   public void testAnalyzeClientReflectasm() {
@@ -53,15 +52,15 @@ public class CheckingExceptionTest {
     Main.main(new String[] {pathToBinary, classTypeStr, "client"});
   }
 
-  @Test
-  public void sootCrash() {
-    String pathToBinary = "resources/kryo-5.6.2.jar";
-    Main.methodBodyAnalysis(pathToBinary);
-  }
+  // @Test
+  // public void sootCrash() {
+  // String pathToBinary = "resources/kryo-5.6.2.jar";
+  // Main.methodBodyAnalysis(pathToBinary);
+  // }
 
   @Test
   public void getPackageNameOfJar() {
     String pathToBinary = "resources/kryo-5.6.2.jar";
-    Main.getJarPackageNames(pathToBinary, "kryo-5.6.2");
+    Main.recordMethodSignaturesForJar(pathToBinary, "kryo-5.6.2");
   }
 }

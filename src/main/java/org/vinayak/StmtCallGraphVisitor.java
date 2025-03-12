@@ -17,16 +17,19 @@ import sootup.java.core.jimple.basic.JavaLocal;
 class StmtCallGraphVisitor extends AbstractStmtVisitor<StmtVisitor> {
   private final TypeHierarchy typeHierarchy;
   private final Body.BodyBuilder bodyBuilder;
-  private final List<ClassType> uncheckedExceptions;
+  private final List<String> uncheckedExceptions;
+  private final String MethodSignature;
   static final String JAVA_LANG_RUNTIME_EXCEPTION = "java.lang.RuntimeException";
 
   public StmtCallGraphVisitor(
       TypeHierarchy typeHierarchy,
       Body.BodyBuilder bodyBuilder,
-      List<ClassType> uncheckedExceptions) {
+      List<String> uncheckedExceptions,
+      String MethodSignature) {
     this.typeHierarchy = typeHierarchy;
     this.bodyBuilder = bodyBuilder;
     this.uncheckedExceptions = uncheckedExceptions;
+    this.MethodSignature = MethodSignature;
   }
 
   @Override
@@ -60,10 +63,12 @@ class StmtCallGraphVisitor extends AbstractStmtVisitor<StmtVisitor> {
         ClassType type = (ClassType) stackName.getType();
         ClassType superClass = typeHierarchy.superClassOf(type).get();
         if (type.getFullyQualifiedName().equals(JAVA_LANG_RUNTIME_EXCEPTION)) {
-          uncheckedExceptions.add(type);
+          String exception = type.toString() + " " + MethodSignature;
+          uncheckedExceptions.add(exception);
         }
         if (superClass.getFullyQualifiedName().equals(JAVA_LANG_RUNTIME_EXCEPTION)) {
-          uncheckedExceptions.add(type);
+          String exception = type.toString() + " " + MethodSignature;
+          uncheckedExceptions.add(exception);
         }
       }
     }
