@@ -36,41 +36,14 @@ To compare unchecked exceptions between two versions of a library:
 
 1. **Run the Python Script**  
    ```bash  
-   python3 transitiveException.py libraryNameOld libraryNameNew  
+   python3 findUCBBC.py <owner/repo> <sha>  
    ```  
 
-2. **Prepare the Resources**  
-   Ensure the JAR files for the libraries you are comparing are located in the `resources` folder.  
-   For example, to compare `asm-5.1` with `asm-7.2`:  
-   - Place `asm-5.1.jar` and `asm-7.2.jar` in the `resources` folder.  
-   - Run the script:  
-     ```bash  
-     python3 transitiveException.py asm-5.1 asm-7.2  
-     ```  
-
-   The output will be a JSON file named `asm-5.1->asm-7.2.json`.  
-
----
-
-## 📂 Output Format  
-The output JSON files provide a structured summary of unchecked exceptions, helping you track changes and identify newly introduced issues.
-Following is the format of the JSON file created by the JAVA application (individual library report):
-```json
-[
-    {
-        "ClassName": [
-            {
-                "methodSignature": "Method signature including return type, method name, and parameter types.",
-                "external_method_calls": ["List of external methods called by this method."],
-                "internal_method_calls": ["List of internal methods called within the same library."],
-                "unchecked_exceptions": ["List of unchecked exceptions that this method may throw."]
-            },
-            ...
-        ]
-    },
-    ...
-]
-```
+   The output will be several JSON files:
+   - individual library analysis results saved in ./LibraryResults
+   - comparison result of libraries saved in ./CompareResults
+   - Library-Client match result saved in ./Match
+   - It will also update or create the result.csv and combined_results.csv in ./results
 
 ---
 
@@ -90,8 +63,7 @@ To analyze a library named `myLibrary.jar` and compare two versions:
    ```  
 
 3. **Compare Versions**  
-   ```bash  
-   python3 transitiveException.py myLibrary-v1 myLibrary-v2  
+   ```bash
+   cd scripts
+   python3 findUCBCC.py <owner/repo> <sha>  
    ```  
-
-The resulting `myLibrary-v1->myLibrary-v2.json` will highlight differences.  
