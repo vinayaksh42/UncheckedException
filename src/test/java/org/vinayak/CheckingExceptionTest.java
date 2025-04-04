@@ -63,4 +63,21 @@ public class CheckingExceptionTest {
     String pathToBinary = "resources/kryo-5.6.2.jar";
     Main.recordMethodSignaturesForJar(pathToBinary, "kryo-5.6.2");
   }
+
+  @Test
+  public void kryoJavaLibraryAnalysis() {
+    String pathToJar =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/dep_old/kryo-3.0.3.jar";
+    String libraryName = "kryo-3.0.3";
+    String MatchesMethods =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/matched_methods/kryo-3.0.3#MatchedMethods.json";
+    Main.callgraphBasedLibraryAnalysis(pathToJar, libraryName, MatchesMethods);
+  }
+
+  @Test
+  public void getCallGraphForMethod() {
+    Main.printCallGraphForMethod(
+        "resources/protobuf-java-4.30.1.jar",
+        "<com.google.protobuf.ByteString: com.google.protobuf.ByteString copyFromUtf8(java.lang.String)>");
+  }
 }
