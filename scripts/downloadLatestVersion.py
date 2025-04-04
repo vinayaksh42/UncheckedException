@@ -38,7 +38,7 @@ def download_jar(group_id, artifact_id, version):
 
     jar_name = f"{artifact_id}-{version}.jar"
 
-    resources_dir = os.path.join(os.path.dirname(__file__), "newdependency")
+    resources_dir = os.path.join(os.path.dirname(__file__), "../resources")
     os.makedirs(resources_dir, exist_ok=True)
     shutil.copy2(jar_name, resources_dir)
 
@@ -114,7 +114,7 @@ def main():
 
     version = get_latest_version(dep_group_id, dep_artifact_id)
 
-    download_jar(dep_group_id, dep_artifact_id, version)
+    download_jar(dep_group_id, dep_artifact_id, dep_version)
 
 if __name__ == "__main__":
     main()
