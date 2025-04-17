@@ -16,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import sootup.callgraph.CallGraph;
-import sootup.callgraph.CallGraphAlgorithm;
 import sootup.callgraph.RapidTypeAnalysisAlgorithm;
 import sootup.core.inputlocation.AnalysisInputLocation;
 import sootup.core.jimple.common.stmt.Stmt;
@@ -36,8 +35,10 @@ import sootup.java.core.JavaSootMethod;
 import sootup.java.core.views.JavaView;
 
 public class Main {
-  static final String JAVA_LIBRARY_PATH = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/rt.jar";
-  static final String JAVA_JCE_PATH = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/jce.jar";
+  static final String JAVA_LIBRARY_PATH =
+      "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/rt.jar";
+  static final String JAVA_JCE_PATH =
+      "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/jce.jar";
 
   public static void main(String[] args) {
     if (args.length < 1) {
@@ -91,7 +92,8 @@ public class Main {
 
   public static void recordMethodSignaturesForJar(String pathToJAR, String libraryName) {
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
     JSONArray methodNameArray = new JSONArray();
     for (SootClass sootClass : view.getClasses()) {
@@ -111,7 +113,8 @@ public class Main {
     JSONArray classArray = new JSONArray();
 
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
 
     for (SootClass sootClass : view.getClasses()) {
@@ -154,11 +157,13 @@ public class Main {
     String jarFile = pathToJAR;
     String rtJarFile = JAVA_LIBRARY_PATH;
 
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(jarFile,
-        SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(jarFile, SourceType.Application);
+    AnalysisInputLocation inputlocationRTJAR =
+        new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
 
-    List<AnalysisInputLocation> inputLocations = ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
+    List<AnalysisInputLocation> inputLocations =
+        ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
 
     JavaView view = new JavaView(inputLocations);
 
@@ -203,13 +208,14 @@ public class Main {
           System.out.println("-----------------------------------------");
 
           List<Stmt> stmts = body.getStmts();
-          StmtVisitor stmtVisitor = new StmtVisitor(
-              typehierarchy,
-              view,
-              bodyBuilder,
-              uncheckedExceptions,
-              internalMethodCalls,
-              externalMethodCalls);
+          StmtVisitor stmtVisitor =
+              new StmtVisitor(
+                  typehierarchy,
+                  view,
+                  bodyBuilder,
+                  uncheckedExceptions,
+                  internalMethodCalls,
+                  externalMethodCalls);
           for (Stmt stmt : stmts) {
             System.out.println(stmt);
             stmt.accept(stmtVisitor);
@@ -321,7 +327,8 @@ public class Main {
     // Read the JSON file and store the contents of the array in a list of strings
     List<String> matchedMethodsList = new ArrayList<>();
     try {
-      String content = new String(Files.readAllBytes(Paths.get(MatchedMethods)), StandardCharsets.UTF_8);
+      String content =
+          new String(Files.readAllBytes(Paths.get(MatchedMethods)), StandardCharsets.UTF_8);
       JSONArray matchedMethodsArray = new JSONArray(content);
       for (int i = 0; i < matchedMethodsArray.length(); i++) {
         matchedMethodsList.add(matchedMethodsArray.getString(i));
@@ -332,8 +339,8 @@ public class Main {
       System.err.println("Error parsing JSON content: " + e.getMessage());
     }
 
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(pathToJAR,
-        SourceType.Application);
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(pathToJAR, SourceType.Application);
 
     List<AnalysisInputLocation> inputLocations = new ArrayList<>();
     inputLocations.add(inputlocationJARToAnalyze);
@@ -412,8 +419,9 @@ public class Main {
               Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
               List<Stmt> stmts = body.getStmts();
-              StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(
-                  typeHierarchy, bodyBuilder, uncheckedExceptions, methodSignature.toString());
+              StmtCallGraphVisitor stmtVisitor =
+                  new StmtCallGraphVisitor(
+                      typeHierarchy, bodyBuilder, uncheckedExceptions, methodSignature.toString());
               for (Stmt stmt : stmts) {
                 stmt.accept(stmtVisitor);
               }
