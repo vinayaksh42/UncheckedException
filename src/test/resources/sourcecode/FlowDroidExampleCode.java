@@ -16,14 +16,14 @@ public class FlowDroidExampleCode {
         String[] arr = new String[2];
         arr[0] = source();
         arr[1] = "hello";
-        throwException(arr[0]);
+        throw new RuntimeException(arr[0]);
     }
 
     // The SOURCE does not reach the SINK
     public void testArray2() {
         String[] arr = new String[2];
         arr[0] = source();
-        throwException("hello");
+        throw new RuntimeException("hello");
     }
 
     // The SOURCE is part of the conditional which cause the Exception
@@ -33,7 +33,7 @@ public class FlowDroidExampleCode {
         arr[0] = temp;
         arr[1] = "hello";
         if (arr[0] == "secret") {
-            throwException("hello");
+            throw new RuntimeException("hello");
         }
     }
 
@@ -41,9 +41,10 @@ public class FlowDroidExampleCode {
     public void testArray4() {
         String[] arr = new String[2];
         arr[0] = source();
+        arr[1] = "hello";
         String Temp = "hello";
         if (Temp == "hello") {
-            throwException("hello");
+            throw new RuntimeException("hello");
         }
     }
 
@@ -54,7 +55,7 @@ public class FlowDroidExampleCode {
         if (arr[0] == "secret") {
             arr[1] = "hello";
         } else {
-            throwException("hello");
+            throw new RuntimeException("hello");
         }
     }
 
@@ -66,7 +67,7 @@ public class FlowDroidExampleCode {
         if (Temp == "hello") {
             arr[2] = "world";
         } else {
-            throwException("hello");
+            throw new RuntimeException("hello");
         }
     }
 }

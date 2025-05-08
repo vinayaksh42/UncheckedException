@@ -1,2 +1,0 @@
-<org.vinayak.PathConditionExample2: java.lang.String getFullName(java.lang.String)> -> _SOURCE_
-<java.lang.RuntimeException: void <init>(java.lang.String)> -> _SINK_
