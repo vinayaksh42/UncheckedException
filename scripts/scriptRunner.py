@@ -3,9 +3,9 @@ import os
 from tqdm import tqdm
 
 def main():
-    file_path = os.path.join(os.path.dirname(__file__), "clientDataSet.txt")
+    file_path = os.path.join(os.path.dirname(__file__), "hasMatches.txt")
     if not os.path.exists(file_path):
-        print("Error: clientDataSet.txt not found.")
+        print("Error: hasMatches.txt not found.")
         return
 
     # Read all lines
