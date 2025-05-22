@@ -6,8 +6,6 @@ import soot.jimple.infoflow.results.InfoflowResults;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,9 +29,7 @@ import sootup.core.model.SootClass;
 import sootup.core.model.SootMethod;
 import sootup.core.model.SourceType;
 import sootup.core.signatures.MethodSignature;
-import sootup.core.typehierarchy.TypeHierarchy;
 import sootup.core.typehierarchy.ViewTypeHierarchy;
-import sootup.core.types.ClassType;
 import sootup.core.views.View;
 import sootup.java.bytecode.inputlocation.JavaClassPathAnalysisInputLocation;
 import sootup.java.bytecode.inputlocation.JrtFileSystemAnalysisInputLocation;
@@ -42,10 +38,25 @@ import sootup.java.core.JavaSootMethod;
 import sootup.java.core.views.JavaView;
 
 public class Main {
-  static final String JAVA_LIBRARY_PATH = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/rt.jar";
-  static final String JAVA_JCE_PATH = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/jce.jar";
-  static final String PATH_TO_JAR_FLOWDROID = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/UETA-1.0-SNAPSHOT.jar";
-  static final String JAVA_8_PATH = "/Library/Java/JavaVirtualMachines/temurin-8.jdk/Contents/Home/bin/java";
+  private static String getJavaLibraryPath() {
+    return ConfigLoader.getProperty("java_library_path",
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/rt.jar");
+  }
+
+  private static String getLibraryResultPath() {
+    return ConfigLoader.getProperty("library_result_path",
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/LibraryResult/");
+  }
+
+  private static String getClientResultPath() {
+    return ConfigLoader.getProperty("client_result_path",
+        "../client/client_results/");
+  }
+
+  private static String getClientTempPath() {
+    return ConfigLoader.getProperty("client_temp_path",
+        "../client/temp/");
+  }
 
   public static void main(String[] args) {
     if (args.length < 1) {
@@ -108,7 +119,7 @@ public class Main {
         methodNameArray.put(method.getSignature());
       }
     }
-    try (FileWriter file = new FileWriter("../client/temp/" + libraryName + ".json")) {
+    try (FileWriter file = new FileWriter(getClientTempPath() + libraryName + ".json")) {
       file.write(methodNameArray.toString(4));
     } catch (IOException e) {
       e.printStackTrace();
@@ -149,144 +160,11 @@ public class Main {
       classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));
     }
 
-    try (FileWriter file = new FileWriter("../client/client_results/" + clientName + ".json")) {
+    try (FileWriter file = new FileWriter(getClientResultPath() + clientName + ".json")) {
       file.write(classArray.toString(4));
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  public static void analyzeLibraryJAR(String pathToJAR, String libraryName) {
-    JSONArray classArray = new JSONArray();
-
-    String jarFile = pathToJAR;
-    String rtJarFile = JAVA_LIBRARY_PATH;
-
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(jarFile,
-        SourceType.Application);
-    AnalysisInputLocation inputlocationRTJAR = new JavaClassPathAnalysisInputLocation(rtJarFile, SourceType.Library);
-
-    List<AnalysisInputLocation> inputLocations = ImmutableList.of(inputlocationJARToAnalyze, inputlocationRTJAR);
-
-    JavaView view = new JavaView(inputLocations);
-
-    TypeHierarchy typehierarchy = view.getTypeHierarchy();
-
-    for (SootClass sootClass : view.getClasses()) {
-      JSONArray methodsArray = new JSONArray();
-
-      if (sootClass.isLibraryClass() == true) {
-        continue;
-      }
-
-      for (SootMethod method : sootClass.getMethods()) {
-        List<ClassType> uncheckedExceptions = new ArrayList<>();
-        List<String> internalMethodCalls = new ArrayList<>();
-        List<String> externalMethodCalls = new ArrayList<>();
-
-        if (method.isAbstract() || method.isNative()) {
-          continue;
-        }
-        if (method
-            .getSignature()
-            .toString()
-            .contains(
-                "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
-          System.out.println("Method: " + method.getSignature());
-        }
-        Body body;
-        try {
-          body = method.getBody();
-        } catch (Exception e) {
-          continue;
-        }
-
-        Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
-        if (method
-            .getSignature()
-            .toString()
-            .contains(
-                "<com.esotericsoftware.kryo.serializers.ClosureSerializer: java.lang.invoke.SerializedLambda toSerializedLambda(java.lang.Object)>")) {
-          System.out.println("Method: " + method.getSignature());
-          System.out.println("-----------------------------------------");
-
-          List<Stmt> stmts = body.getStmts();
-          StmtVisitor stmtVisitor = new StmtVisitor(
-              typehierarchy,
-              view,
-              bodyBuilder,
-              uncheckedExceptions,
-              internalMethodCalls,
-              externalMethodCalls);
-          for (Stmt stmt : stmts) {
-            System.out.println(stmt);
-            stmt.accept(stmtVisitor);
-          }
-        }
-
-        JSONObject methodObject = new JSONObject();
-        methodObject.put("methodSignature", method.getSignature());
-        methodObject.put(
-            "unchecked_exceptions",
-            uncheckedExceptions.stream().map(ClassType::toString).toArray());
-        methodObject.put("internal_method_calls", internalMethodCalls.toArray());
-        methodObject.put("external_method_calls", externalMethodCalls.toArray());
-        methodsArray.put(methodObject);
-      }
-      classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));
-    }
-
-    try (FileWriter file = new FileWriter("results/" + libraryName + ".json")) {
-      file.write(classArray.toString(4));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public static void printCallGraphForMethod(String pathToJAR, String MethodToSearch) {
-    List<AnalysisInputLocation> inputLocations = new ArrayList<>();
-    inputLocations.add(new JavaClassPathAnalysisInputLocation(pathToJAR, SourceType.Application));
-
-    JavaView view = new JavaView(inputLocations);
-
-    for (SootClass sootClass : view.getClasses()) {
-      if (sootClass.isLibraryClass() == true) {
-        continue;
-      }
-
-      for (SootMethod method : sootClass.getMethods()) {
-        List<String> uncheckedExceptions = new ArrayList<>();
-
-        // check if method is part of matchedMethodsList
-        if (!MethodToSearch.equalsIgnoreCase(method.getSignature().toString())
-            || method.isAbstract()
-            || method.isNative()) {
-          continue;
-        }
-
-        // Create type hierarchy and CHA
-        RapidTypeAnalysisAlgorithm cha = new RapidTypeAnalysisAlgorithm(view);
-
-        // Create CG by initializing CHA with entry method(s)
-        MethodSignature entryMethodSignature = method.getSignature();
-
-        CallGraph cg;
-        try {
-          cg = cha.initialize(Collections.singletonList(entryMethodSignature));
-        } catch (Exception e) {
-          continue;
-        }
-
-        System.out.println("CallGraph for " + MethodToSearch + ": " + cg.exportAsDot());
-      }
-    }
-  }
-
-  private static String[] buildCommand(String javaPath, String jarPath, String[] args) {
-    String[] base = { javaPath, "-jar", jarPath };
-    String[] full = Arrays.copyOf(base, base.length + args.length);
-    System.arraycopy(args, 0, full, base.length, args.length);
-    return full;
   }
 
   public static void callgraphBasedLibraryAnalysis(
@@ -416,7 +294,7 @@ public class Main {
       classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));
     }
     try (FileWriter file = new FileWriter(
-        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/LibraryResult/" + libraryName
+        getLibraryResultPath() + libraryName
             + ".json")) {
       file.write(classArray.toString(4));
     } catch (IOException e) {

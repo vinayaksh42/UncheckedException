@@ -1,10 +1,10 @@
 public class DriverStub {
 
-    public static int source0() {
-        return 0;
+    public static java.io.OutputStream source0() {
+        return null;
     }
 
     public static void run() {
-        new com.esotericsoftware.kryo.io.Output().writeInt(source0());
+        new com.esotericsoftware.kryo.io.Output(source0());
     }
 }

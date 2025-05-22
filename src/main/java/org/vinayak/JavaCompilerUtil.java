@@ -16,7 +16,7 @@ public class JavaCompilerUtil {
     System.out.println("Compiling Java File: " + javaFilePath);
     System.out.println("Compiling Output Dir: " + classOutputFolder);
 
-    String java11Javac = "/opt/homebrew/Cellar/openjdk@11/11.0.26/libexec/openjdk.jdk/Contents/Home/bin/javac";
+    String java11Javac = ConfigLoader.getProperty("java11_path");
 
     try {
       ProcessBuilder pb = new ProcessBuilder(

@@ -12,20 +12,6 @@ public class CheckingExceptionTest {
   // Main.callgraphBasedLibraryAnalysis(pathToBinary, classTypeStr);
   // }
 
-  @Test
-  public void testAnalyzeBinaryAsmNew() {
-    String pathToBinary = "resources/asm-7.2.jar";
-    String classTypeStr = "asm-7.2";
-    Main.analyzeLibraryJAR(pathToBinary, classTypeStr);
-  }
-
-  @Test
-  public void testAnalyzeBinaryKryoNew() {
-    String pathToBinary = "resources/kryo-5.0.0-RC4.jar";
-    String classTypeStr = "kryo-5.0.0-RC4";
-    Main.analyzeLibraryJAR(pathToBinary, classTypeStr);
-  }
-
   // @Test
   // public void testAnalyzeBinaryKryoNewFaulty() {
   // String pathToBinary = "resources/kryo-5.6.2.jar";
@@ -70,13 +56,6 @@ public class CheckingExceptionTest {
     String libraryName = "kryo-3.0.3";
     String MatchesMethods = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/matched_methods/kryo-3.0.3#MatchedMethods.json";
     Main.callgraphBasedLibraryAnalysis(pathToJar, libraryName, MatchesMethods);
-  }
-
-  @Test
-  public void getCallGraphForMethod() {
-    Main.printCallGraphForMethod(
-        "resources/protobuf-java-4.30.1.jar",
-        "<com.google.protobuf.ByteString: com.google.protobuf.ByteString copyFromUtf8(java.lang.String)>");
   }
 
   @Test

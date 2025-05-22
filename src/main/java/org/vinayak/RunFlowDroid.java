@@ -46,9 +46,9 @@ public class RunFlowDroid {
             String LibraryJarPath,
             List<String> sinkSignatures) {
 
-        String driverJavaPath = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/src/main/resources/DriverStub.java";
-        String driverClassFolder = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/src/main/resources/DriverStub";
-        String xmlPath = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/src/main/resources/SourcesAndSinks.xml";
+        String driverJavaPath = ConfigLoader.getProperty("driver_java_path");
+        String driverClassFolder = ConfigLoader.getProperty("driver_class_folder");
+        String xmlPath = ConfigLoader.getProperty("xml_path");
 
         String[] paramTypes = parseParamTypes(MethodSignature);
 

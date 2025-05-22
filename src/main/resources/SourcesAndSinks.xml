@@ -1,8 +1,48 @@
 <sinkSources>
   <category id="NO_CATEGORY">
-    <method signature="DriverStub: int source0()">
+    <method signature="DriverStub: java.io.OutputStream source0()">
       <return>
         <accessPath isSource="true" isSink="false"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;()">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;(java.lang.String,java.lang.Throwable)">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;(java.lang.String)">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;(java.lang.Throwable)">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;()">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;(java.lang.String,java.lang.Throwable)">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;(java.lang.String)">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
+      </return>
+    </method>
+    <method signature="java.lang.IllegalArgumentException: void &lt;init&gt;(java.lang.Throwable)">
+      <return>
+        <accessPath isSource="false" isSink="true"/>
       </return>
     </method>
   </category>
