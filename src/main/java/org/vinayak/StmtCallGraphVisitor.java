@@ -19,17 +19,21 @@ class StmtCallGraphVisitor extends AbstractStmtVisitor<StmtVisitor> {
   private final Body.BodyBuilder bodyBuilder;
   private final List<String> uncheckedExceptions;
   private final String MethodSignature;
+  private final List<String> sinkForFlowDroid;
   static final String JAVA_LANG_RUNTIME_EXCEPTION = "java.lang.RuntimeException";
+  static final String JAVA_LANG_ERROR = "java.lang.Error";
 
   public StmtCallGraphVisitor(
       TypeHierarchy typeHierarchy,
       Body.BodyBuilder bodyBuilder,
       List<String> uncheckedExceptions,
-      String MethodSignature) {
+      String MethodSignature,
+      List<String> sinkForFlowDroid) {
     this.typeHierarchy = typeHierarchy;
     this.bodyBuilder = bodyBuilder;
     this.uncheckedExceptions = uncheckedExceptions;
     this.MethodSignature = MethodSignature;
+    this.sinkForFlowDroid = sinkForFlowDroid;
   }
 
   @Override
@@ -62,13 +66,16 @@ class StmtCallGraphVisitor extends AbstractStmtVisitor<StmtVisitor> {
       if (local.getName().equals(stackName.getName())) {
         ClassType type = (ClassType) stackName.getType();
         ClassType superClass = typeHierarchy.superClassOf(type).get();
-        if (type.getFullyQualifiedName().equals(JAVA_LANG_RUNTIME_EXCEPTION)) {
+        if (type.getFullyQualifiedName().equals(JAVA_LANG_RUNTIME_EXCEPTION)
+            || superClass.getFullyQualifiedName().equals(JAVA_LANG_RUNTIME_EXCEPTION)
+            || type.getFullyQualifiedName().equals(JAVA_LANG_ERROR)
+            || superClass.getFullyQualifiedName().equals(JAVA_LANG_ERROR)) {
           String exception = type.toString() + " " + MethodSignature;
           uncheckedExceptions.add(exception);
-        }
-        if (superClass.getFullyQualifiedName().equals(JAVA_LANG_RUNTIME_EXCEPTION)) {
-          String exception = type.toString() + " " + MethodSignature;
-          uncheckedExceptions.add(exception);
+          sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;()");
+          sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;(java.lang.String,java.lang.Throwable)");
+          sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;(java.lang.String)");
+          sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;(java.lang.Throwable)");
         }
       }
     }

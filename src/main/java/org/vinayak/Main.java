@@ -2,6 +2,8 @@ package org.vinayak;
 
 import com.google.common.collect.ImmutableList;
 
+import soot.jimple.infoflow.results.InfoflowResults;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -335,6 +337,7 @@ public class Main {
 
       for (SootMethod method : sootClass.getMethods()) {
         List<String> uncheckedExceptions = new ArrayList<>();
+        List<String> sinkForFlowDroid = new ArrayList<>();
 
         // check if method is part of matchedMethodsList
         if (!matchedMethodsList.contains(method.getSignature().toString())) {
@@ -392,7 +395,7 @@ public class Main {
 
               List<Stmt> stmts = body.getStmts();
               StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(
-                  typeHierarchy, bodyBuilder, uncheckedExceptions, methodSignature.toString());
+                  typeHierarchy, bodyBuilder, uncheckedExceptions, methodSignature.toString(), sinkForFlowDroid);
               for (Stmt stmt : stmts) {
                 stmt.accept(stmtVisitor);
               }
@@ -401,10 +404,9 @@ public class Main {
         }
         System.out.println("Method: " + method.getSignature());
 
-        java.util.List<String> sinks = Arrays
-            .asList("java.lang.IllegalArgumentException: void &lt;init&gt;(java.lang.String)");
-
-        System.out.println(RunFlowDroid.flowDroidExceptionAnalysis(method.getSignature().toString(), pathToJAR, sinks));
+        InfoflowResults results = RunFlowDroid.flowDroidExceptionAnalysis(method.getSignature().toString(), pathToJAR,
+            sinkForFlowDroid);
+        System.out.println("Results: " + results);
 
         JSONObject methodObject = new JSONObject();
         methodObject.put("methodSignature", method.getSignature());
