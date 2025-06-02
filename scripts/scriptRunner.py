@@ -1,11 +1,16 @@
 import subprocess
 import os
+import sys
 from tqdm import tqdm
 
 def main():
-    file_path = os.path.join(os.path.dirname(__file__), "hasMatches.txt")
+    if len(sys.argv) < 2:
+        print("Usage: python3 scriptRunner.py <input_file>")
+        return
+
+    file_path = sys.argv[1]
     if not os.path.exists(file_path):
-        print("Error: hasMatches.txt not found.")
+        print(f"Error: {file_path} not found.")
         return
 
     # Read all lines

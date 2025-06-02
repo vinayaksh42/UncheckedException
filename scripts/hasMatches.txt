@@ -1,13 +1,3 @@
-davidmoten/rtree
-0RaymondJiang0/tushare-java
-0xdecaf/beam-enrichment-patterns
-0opslab/opslabJutil
-1036225283/xws
-1053531172/springboot2
-18099538715/tableshard
-2425358736/mybatis-generator-demo
-266945/GOIM
-269941633/spring-boot-mybatis
 269941633/spring-boot-mybatis-mysql-write-read
 269941633/spring-boot-mybatis-redis
 27392/java-notes
@@ -34,3 +24,4 @@ davidmoten/rtree
 99soft/lifegycle
 99soft/rocoto
 99soft/sameas4j
+davidmoten/rtree
