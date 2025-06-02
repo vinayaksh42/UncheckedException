@@ -1,10 +1,14 @@
 public class DriverStub {
 
-    public static java.io.OutputStream source0() {
+    public static java.lang.reflect.Type source0() {
+        return null;
+    }
+
+    public static java.lang.Object source1() {
         return null;
     }
 
     public static void run() {
-        new com.esotericsoftware.kryo.io.Output(source0());
+        com.google.gson.GsonBuilder result = new com.google.gson.GsonBuilder().registerTypeAdapter(source0(), source1());
     }
 }

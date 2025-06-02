@@ -73,7 +73,8 @@ class StmtCallGraphVisitor extends AbstractStmtVisitor<StmtVisitor> {
           String exception = type.toString() + " " + MethodSignature;
           uncheckedExceptions.add(exception);
           sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;()");
-          sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;(java.lang.String,java.lang.Throwable)");
+          sinkForFlowDroid.add(
+              type.toString() + ": void &lt;init&gt;(java.lang.String,java.lang.Throwable)");
           sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;(java.lang.String)");
           sinkForFlowDroid.add(type.toString() + ": void &lt;init&gt;(java.lang.Throwable)");
         }

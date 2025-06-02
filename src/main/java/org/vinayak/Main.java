@@ -1,9 +1,5 @@
 package org.vinayak;
 
-import com.google.common.collect.ImmutableList;
-
-import soot.jimple.infoflow.results.InfoflowResults;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,11 +11,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import sootup.callgraph.CallGraph;
 import sootup.callgraph.RapidTypeAnalysisAlgorithm;
 import sootup.core.inputlocation.AnalysisInputLocation;
@@ -39,23 +33,23 @@ import sootup.java.core.views.JavaView;
 
 public class Main {
   private static String getJavaLibraryPath() {
-    return ConfigLoader.getProperty("java_library_path",
+    return ConfigLoader.getProperty(
+        "java_library_path",
         "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/resources/rt.jar");
   }
 
   private static String getLibraryResultPath() {
-    return ConfigLoader.getProperty("library_result_path",
+    return ConfigLoader.getProperty(
+        "library_result_path",
         "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/LibraryResult/");
   }
 
   private static String getClientResultPath() {
-    return ConfigLoader.getProperty("client_result_path",
-        "../client/client_results/");
+    return ConfigLoader.getProperty("client_result_path", "../client/client_results/");
   }
 
   private static String getClientTempPath() {
-    return ConfigLoader.getProperty("client_temp_path",
-        "../client/temp/");
+    return ConfigLoader.getProperty("client_temp_path", "../client/temp/");
   }
 
   public static void main(String[] args) {
@@ -110,7 +104,8 @@ public class Main {
 
   public static void recordMethodSignaturesForJar(String pathToJAR, String libraryName) {
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
     JSONArray methodNameArray = new JSONArray();
     for (SootClass sootClass : view.getClasses()) {
@@ -130,7 +125,8 @@ public class Main {
     JSONArray classArray = new JSONArray();
 
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation =
+        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
 
     for (SootClass sootClass : view.getClasses()) {
@@ -180,7 +176,8 @@ public class Main {
     // Read the JSON file and store the contents of the array in a list of strings
     List<String> matchedMethodsList = new ArrayList<>();
     try {
-      String content = new String(Files.readAllBytes(Paths.get(MatchedMethods)), StandardCharsets.UTF_8);
+      String content =
+          new String(Files.readAllBytes(Paths.get(MatchedMethods)), StandardCharsets.UTF_8);
       JSONArray matchedMethodsArray = new JSONArray(content);
       for (int i = 0; i < matchedMethodsArray.length(); i++) {
         matchedMethodsList.add(matchedMethodsArray.getString(i));
@@ -191,8 +188,8 @@ public class Main {
       System.err.println("Error parsing JSON content: " + e.getMessage());
     }
 
-    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(pathToJAR,
-        SourceType.Application);
+    AnalysisInputLocation inputlocationJARToAnalyze =
+        new JavaClassPathAnalysisInputLocation(pathToJAR, SourceType.Application);
 
     List<AnalysisInputLocation> inputLocations = new ArrayList<>();
     inputLocations.add(inputlocationJARToAnalyze);
@@ -226,6 +223,12 @@ public class Main {
           continue;
         }
 
+        if (method.getParameterCount() == 0) {
+          // FlowDroid implementation does not support methods with no parameters,
+          // moreover it won't produce any results
+          continue;
+        }
+
         try {
           Body bodychecker = method.getBody();
         } catch (Exception e) {
@@ -242,7 +245,13 @@ public class Main {
         CallGraph cg;
         try {
           cg = rta.initialize(Collections.singletonList(entryMethodSignature));
+        } catch (AssertionError ae) {
+          System.err.println("AssertionError while processing method: " + method.getSignature());
+          ae.printStackTrace();
+          continue;
         } catch (Exception e) {
+          System.err.println("Exception while processing method: " + method.getSignature());
+          e.printStackTrace();
           continue;
         }
 
@@ -272,8 +281,13 @@ public class Main {
               Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
               List<Stmt> stmts = body.getStmts();
-              StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(
-                  typeHierarchy, bodyBuilder, uncheckedExceptions, methodSignature.toString(), sinkForFlowDroid);
+              StmtCallGraphVisitor stmtVisitor =
+                  new StmtCallGraphVisitor(
+                      typeHierarchy,
+                      bodyBuilder,
+                      uncheckedExceptions,
+                      methodSignature.toString(),
+                      sinkForFlowDroid);
               for (Stmt stmt : stmts) {
                 stmt.accept(stmtVisitor);
               }
@@ -281,21 +295,46 @@ public class Main {
           }
         }
         System.out.println("Method: " + method.getSignature());
+        if (method
+            .getSignature()
+            .toString()
+            .equals(
+                "<org.apache.beam.sdk.transforms.GroupByKey: void applicableTo(org.apache.beam.sdk.values.PCollection)>")) {
+          System.out.println("Got here 2");
+        }
 
-        InfoflowResults results = RunFlowDroid.flowDroidExceptionAnalysis(method.getSignature().toString(), pathToJAR,
-            sinkForFlowDroid);
-        System.out.println("Results: " + results);
+        List<String> uncheckedExceptionsResults = new ArrayList<>();
+        if (!uncheckedExceptions.isEmpty()) {
+          System.out.println("RTA sootup has found some unchecked Exceptions");
+          uncheckedExceptionsResults =
+              RunFlowDroid.flowDroidExceptionAnalysis(
+                  method.getSignature().toString(),
+                  pathToJAR,
+                  sinkForFlowDroid,
+                  uncheckedExceptionsResults,
+                  method,
+                  viewJar);
+          if (uncheckedExceptionsResults != null) {
+            System.out.println("FlowDroid has found some unchecked Exceptions");
+            JSONObject methodObject = new JSONObject();
+            methodObject.put("methodSignature", method.getSignature());
+            System.out.println("Got here 0");
+            methodObject.put("unchecked_exceptions", uncheckedExceptionsResults.stream().toArray());
+            methodsArray.put(methodObject);
+          }
 
-        JSONObject methodObject = new JSONObject();
-        methodObject.put("methodSignature", method.getSignature());
-        methodObject.put("unchecked_exceptions", uncheckedExceptions.stream().toArray());
-        methodsArray.put(methodObject);
+        } else {
+          System.out.println("RTA sootup has not found any unchecked Exceptions");
+          JSONObject methodObject = new JSONObject();
+          methodObject.put("methodSignature", method.getSignature());
+          System.out.println("Got here 1");
+          methodObject.put("unchecked_exceptions", uncheckedExceptions.stream().toArray());
+          methodsArray.put(methodObject);
+        }
       }
       classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));
     }
-    try (FileWriter file = new FileWriter(
-        getLibraryResultPath() + libraryName
-            + ".json")) {
+    try (FileWriter file = new FileWriter(getLibraryResultPath() + libraryName + ".json")) {
       file.write(classArray.toString(4));
     } catch (IOException e) {
       e.printStackTrace();

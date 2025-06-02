@@ -35,7 +35,7 @@ public class CheckingExceptionTest {
   public void testAnalyzeClientReflectasmMain() {
     String pathToBinary = "client_jar/reflectasm-1.11.10-SNAPSHOT.jar";
     String classTypeStr = "reflectasm-1.11.10-SNAPSHOT";
-    Main.main(new String[] { pathToBinary, classTypeStr, "client" });
+    Main.main(new String[] {pathToBinary, classTypeStr, "client"});
   }
 
   // @Test
@@ -52,17 +52,31 @@ public class CheckingExceptionTest {
 
   @Test
   public void kryoJavaLibraryAnalysis() {
-    String pathToJar = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/dep_old/kryo-3.0.3.jar";
+    String pathToJar =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/dep_old/kryo-3.0.3.jar";
     String libraryName = "kryo-3.0.3";
-    String MatchesMethods = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/matched_methods/kryo-3.0.3#MatchedMethods.json";
+    String MatchesMethods =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/matched_methods/kryo-3.0.3#MatchedMethods.json";
     Main.callgraphBasedLibraryAnalysis(pathToJar, libraryName, MatchesMethods);
   }
 
   @Test
   public void testKyroOnMainTool() {
-    String pathToJar = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/dep_old/kryo-3.0.3.jar";
+    String pathToJar =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/dep_old/kryo-3.0.3.jar";
     String LibrarName = "kryo-3.0.3";
-    String MatchedMethods = "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/matched_methods/kryo-3.0.3#MatchedMethods.json";
+    String MatchedMethods =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/matched_methods/kryo-3.0.3#MatchedMethods.json";
     Main.callgraphBasedLibraryAnalysis(pathToJar, LibrarName, MatchedMethods);
+  }
+
+  @Test
+  public void testRealWorldScenrio() {
+    String pathToJar =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/dep_new/beam-sdks-java-core-2.65.0.jar";
+    String libraryName = "beam-sdks-java-core-2.65.0";
+    String MatchesMethods =
+        "/Users/vinayaksh42/Desktop/Research/BBC Research/unexpectedException/client/matched_methods/beam-sdks-java-core-2.9.0#MatchedMethods.json";
+    Main.callgraphBasedLibraryAnalysis(pathToJar, libraryName, MatchesMethods);
   }
 }

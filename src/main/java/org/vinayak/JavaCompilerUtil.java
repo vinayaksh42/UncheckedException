@@ -19,8 +19,9 @@ public class JavaCompilerUtil {
     String java11Javac = ConfigLoader.getProperty("java11_path");
 
     try {
-      ProcessBuilder pb = new ProcessBuilder(
-          java11Javac, "-classpath", libraryJarPath, "-d", classOutputFolder, javaFilePath);
+      ProcessBuilder pb =
+          new ProcessBuilder(
+              java11Javac, "-classpath", libraryJarPath, "-d", classOutputFolder, javaFilePath);
       pb.inheritIO(); // Show output in console
       Process process = pb.start();
       int exitCode = process.waitFor();
