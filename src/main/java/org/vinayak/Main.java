@@ -104,8 +104,7 @@ public class Main {
 
   public static void recordMethodSignaturesForJar(String pathToJAR, String libraryName) {
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation =
-        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
     JSONArray methodNameArray = new JSONArray();
     for (SootClass sootClass : view.getClasses()) {
@@ -125,8 +124,7 @@ public class Main {
     JSONArray classArray = new JSONArray();
 
     Path path = Paths.get(pathToJAR);
-    AnalysisInputLocation inputLocation =
-        PathBasedAnalysisInputLocation.create(path, SourceType.Application);
+    AnalysisInputLocation inputLocation = PathBasedAnalysisInputLocation.create(path, SourceType.Application);
     View view = new JavaView(inputLocation);
 
     for (SootClass sootClass : view.getClasses()) {
@@ -176,8 +174,7 @@ public class Main {
     // Read the JSON file and store the contents of the array in a list of strings
     List<String> matchedMethodsList = new ArrayList<>();
     try {
-      String content =
-          new String(Files.readAllBytes(Paths.get(MatchedMethods)), StandardCharsets.UTF_8);
+      String content = new String(Files.readAllBytes(Paths.get(MatchedMethods)), StandardCharsets.UTF_8);
       JSONArray matchedMethodsArray = new JSONArray(content);
       for (int i = 0; i < matchedMethodsArray.length(); i++) {
         matchedMethodsList.add(matchedMethodsArray.getString(i));
@@ -188,8 +185,8 @@ public class Main {
       System.err.println("Error parsing JSON content: " + e.getMessage());
     }
 
-    AnalysisInputLocation inputlocationJARToAnalyze =
-        new JavaClassPathAnalysisInputLocation(pathToJAR, SourceType.Application);
+    AnalysisInputLocation inputlocationJARToAnalyze = new JavaClassPathAnalysisInputLocation(pathToJAR,
+        SourceType.Application);
 
     List<AnalysisInputLocation> inputLocations = new ArrayList<>();
     inputLocations.add(inputlocationJARToAnalyze);
@@ -215,17 +212,18 @@ public class Main {
         List<String> sinkForFlowDroid = new ArrayList<>();
 
         // check if method is part of matchedMethodsList
-        if (!matchedMethodsList.contains(method.getSignature().toString())) {
-          continue;
-        }
+        // removed it for doing a libary only analysis
+        // if (!matchedMethodsList.contains(method.getSignature().toString())) {
+        // continue;
+        // }
+
+        // if (method.getParameterCount() == 0) {
+        // // FlowDroid implementation does not support methods with no parameters,
+        // // moreover it won't produce any results
+        // continue;
+        // }
 
         if (method.isAbstract() || method.isNative()) {
-          continue;
-        }
-
-        if (method.getParameterCount() == 0) {
-          // FlowDroid implementation does not support methods with no parameters,
-          // moreover it won't produce any results
           continue;
         }
 
@@ -281,56 +279,50 @@ public class Main {
               Body.BodyBuilder bodyBuilder = Body.builder(body, Collections.emptySet());
 
               List<Stmt> stmts = body.getStmts();
-              StmtCallGraphVisitor stmtVisitor =
-                  new StmtCallGraphVisitor(
-                      typeHierarchy,
-                      bodyBuilder,
-                      uncheckedExceptions,
-                      methodSignature.toString(),
-                      sinkForFlowDroid);
+              StmtCallGraphVisitor stmtVisitor = new StmtCallGraphVisitor(
+                  typeHierarchy,
+                  bodyBuilder,
+                  uncheckedExceptions,
+                  methodSignature.toString(),
+                  sinkForFlowDroid);
               for (Stmt stmt : stmts) {
                 stmt.accept(stmtVisitor);
               }
             }
           }
         }
-        System.out.println("Method: " + method.getSignature());
-        if (method
-            .getSignature()
-            .toString()
-            .equals(
-                "<org.apache.beam.sdk.transforms.GroupByKey: void applicableTo(org.apache.beam.sdk.values.PCollection)>")) {
-          System.out.println("Got here 2");
-        }
+        // commented out for performing library only analysis
+        // List<String> uncheckedExceptionsResults = new ArrayList<>();
+        // if (!uncheckedExceptions.isEmpty()) {
+        // System.out.println("RTA sootup has found some unchecked Exceptions");
+        // uncheckedExceptionsResults = RunFlowDroid.flowDroidExceptionAnalysis(
+        // method.getSignature().toString(),
+        // pathToJAR,
+        // sinkForFlowDroid,
+        // uncheckedExceptionsResults,
+        // method,
+        // viewJar);
+        // if (uncheckedExceptionsResults != null) {
+        // System.out.println("FlowDroid has found some unchecked Exceptions");
+        // JSONObject methodObject = new JSONObject();
+        // methodObject.put("methodSignature", method.getSignature());
+        // methodObject.put("unchecked_exceptions",
+        // uncheckedExceptionsResults.stream().toArray());
+        // methodsArray.put(methodObject);
+        // }
 
-        List<String> uncheckedExceptionsResults = new ArrayList<>();
-        if (!uncheckedExceptions.isEmpty()) {
-          System.out.println("RTA sootup has found some unchecked Exceptions");
-          uncheckedExceptionsResults =
-              RunFlowDroid.flowDroidExceptionAnalysis(
-                  method.getSignature().toString(),
-                  pathToJAR,
-                  sinkForFlowDroid,
-                  uncheckedExceptionsResults,
-                  method,
-                  viewJar);
-          if (uncheckedExceptionsResults != null) {
-            System.out.println("FlowDroid has found some unchecked Exceptions");
-            JSONObject methodObject = new JSONObject();
-            methodObject.put("methodSignature", method.getSignature());
-            System.out.println("Got here 0");
-            methodObject.put("unchecked_exceptions", uncheckedExceptionsResults.stream().toArray());
-            methodsArray.put(methodObject);
-          }
-
-        } else {
-          System.out.println("RTA sootup has not found any unchecked Exceptions");
-          JSONObject methodObject = new JSONObject();
-          methodObject.put("methodSignature", method.getSignature());
-          System.out.println("Got here 1");
-          methodObject.put("unchecked_exceptions", uncheckedExceptions.stream().toArray());
-          methodsArray.put(methodObject);
-        }
+        // } else {
+        // System.out.println("RTA sootup has not found any unchecked Exceptions");
+        // JSONObject methodObject = new JSONObject();
+        // methodObject.put("methodSignature", method.getSignature());
+        // methodObject.put("unchecked_exceptions",
+        // uncheckedExceptions.stream().toArray());
+        // methodsArray.put(methodObject);
+        // }
+        JSONObject methodObject = new JSONObject();
+        methodObject.put("methodSignature", method.getSignature());
+        methodObject.put("unchecked_exceptions", uncheckedExceptions.stream().toArray());
+        methodsArray.put(methodObject);
       }
       classArray.put(new JSONObject().put(sootClass.getName(), methodsArray));
     }

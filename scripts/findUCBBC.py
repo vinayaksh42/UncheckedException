@@ -171,7 +171,7 @@ def main():
             # 11B - Search methods in the client that might have a BBC due to the newly added unchecked exception
             subprocess.run(['python', 'searchMethodsToTest.py', '../client/client_results/' + client_name + '.json', '../CompareResult/' + libraryOld + "#" + libraryNew + ".json" , '../Match/' + final_result_name])
             # 12B - save the results in a csv file, save the client repo url, library names, library version, matched methods, git commit sha, and the time of the analysis
-            saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name,match_dir)
+            # saveResults(libraryOld, libraryNew, client_name, owner_repo, commit_sha, final_result, final_result_name,match_dir)
 
         # for directory in setup_dirs:
         #     delete_directory(directory)
