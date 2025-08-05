@@ -1,13 +1,13 @@
 # UncheckedExceptionChangeDetector
 
-A tool to identify and compare unchecked exceptions in Java applications and libraries.
+A tool to identify and compare unchecked exceptions thrown in Java applications and libraries.
 ![image](https://github.com/user-attachments/assets/94236f3e-c39c-45b4-a911-7f331934eed3)
 
 ---
 
 ## 📋 Overview  
-UncheckedException is a powerful utility to:  
-1. Detect all unchecked exceptions present in a Java application.  
+UncheckedExceptionChangeDetector can:
+1. Create a list of all unchecked exceptions explicitly thrown in a Java application.  
 2. Compare versions of a Java library to find newly added unchecked exceptions.  
 
 ---
